@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C++ Express 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "web-crawler-example", "web-crawler-example.vcxproj", "{F254A3DF-CFB1-435B-8AA0-8D47530B32E4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F254A3DF-CFB1-435B-8AA0-8D47530B32E4}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F254A3DF-CFB1-435B-8AA0-8D47530B32E4}.Debug|Win32.Build.0 = Debug|Win32
+		{F254A3DF-CFB1-435B-8AA0-8D47530B32E4}.Release|Win32.ActiveCfg = Release|Win32
+		{F254A3DF-CFB1-435B-8AA0-8D47530B32E4}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
