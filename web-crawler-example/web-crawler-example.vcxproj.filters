@@ -18,12 +18,24 @@
     <ClInclude Include="httpClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResponseParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ResponseLexer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="httpClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResponseParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ResponseLexer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

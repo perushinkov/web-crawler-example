@@ -1,3 +1,6 @@
+#ifndef __HTTPCLIENT_H
+#define __HTTPCLIENT_H 1
+
 #include <iostream>
 using namespace std;
 
@@ -15,11 +18,11 @@ public:
 
 	int request(string requestUri, string host);
 
-	//temporary method
-	char * getAThousandSymbols();
+	//symbol by symbol request will be parsed. Reading lots of it and caching will be done later.
+	char * getResponse();
 
 	//Utility methods
 	int error() {return errorCode;}
 };
 
-
+#endif

@@ -1,4 +1,6 @@
-#include "httpClient.h"
+#include "HttpClient.h"
+
+#define RESPONSE_MAX_LENGTH 10000
 
 HttpClient::HttpClient(long serverPort, string serverIp){
 	this->serverPort = serverPort;
@@ -8,8 +10,9 @@ HttpClient::HttpClient(long serverPort, string serverIp){
 	unsigned short wVersionRequested;
 	WSADATA wsaData;
 	int err;
-
-	wVersionRequested = MAKEWORD(2, 2);
+	
+	// PART ONE: Initiating use of Winsock DLL
+	wVersionRequested = MAKEWORD(2, 3);
 	err = WSAStartup(wVersionRequested, &wsaData);
 
 	if (err != 0 || (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) ) {
@@ -23,6 +26,7 @@ HttpClient::HttpClient(long serverPort, string serverIp){
 	p_int = (int *)malloc(sizeof(int));
 	*p_int = 1;
 
+	//Setting some standard options, recommended by our lecturer
 	int opt1 = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)p_int, sizeof(int));
 	int opt2 = setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char *)p_int, sizeof(int));
 
@@ -36,26 +40,52 @@ HttpClient::HttpClient(long serverPort, string serverIp){
 	my_addr.sin_port = htons(serverPort);
 
 	memset(&(my_addr.sin_zero), 0, 8);
-	my_addr.sin_addr.s_addr = inet_addr(serverIp.c_str);
+	my_addr.sin_addr.s_addr = inet_addr(serverIp.c_str());
 
 	if (connect(sock, (sockaddr *)&my_addr, sizeof(my_addr))) {
 		errorCode = 3;
 		return;
 	}
 }
-
+/**
+ *	Performs a standard HTTP request, filling in 
+ *	the requestUri and the host name, as shown below:
+ *	
+ *	GET <requestUri> HTTP/1.1<CRLF>
+ *	host: <host><CRLF>
+ *  <CRLF>
+ *
+ *	The last empty line matters! It signifies the end of the HTTP request.
+ */
 int HttpClient::request(string requestUri, string host) {
 	string queryString = "GET ";
 	queryString+= requestUri;
 	queryString+= " HTTP/1.1\n";
 	queryString+= "host: ";
 	queryString+= host;
-	queryString+= "\n";
-	return send(sock, queryString.c_str, queryString.length, 0);
+	queryString+= "\n\n";
+	return send(sock, queryString.c_str(), queryString.length(), 0);
 }
+/**
+ * Fetches HTTP response.
+ */
+char * HttpClient::getResponse() {
+	// Holder to contain the response. It is created huge,
+	// as we cannot tell beforehand what the size of the response is
+	char * text = (char *)malloc(RESPONSE_MAX_LENGTH);
 
-char * HttpClient::getAThousandSymbols() {
-	char * text = (char *)malloc(1000);
-	int received = recv(sock, text, 1000, 0);
-	return text;
+	// Assuming the response does not exceed the set maximum length,
+	// we get the response text into the char*text holder
+	int received = recv(sock, text, RESPONSE_MAX_LENGTH, 0);
+	
+	// Once we know the length of the received text, we allocate
+	// a holder just big enough to contain it
+	char * returnText = (char *)malloc(received+1);
+	// and copy the response text into it
+	*(text + received*sizeof(char)) = '\0';
+	strcpy(returnText, text);
+	
+	//Then we free the originally allocated memory, which we no longer need.
+	free(text);
+	return returnText;
 }
