@@ -5,11 +5,8 @@ namespace spider {
 	enum Errors { OK, NOTFOUND, REDIRECT, ANOTHER};
 
 	class ResponseParser{
-	private:		
-		char * fetchHeader(char * text);
-		void matchResponse();
-		
-		void matchStatusLine();
+	private:
+		ResponseLexer * lexer;
 	public:
 		ResponseParser(){}
 		Errors parse(char * t);
