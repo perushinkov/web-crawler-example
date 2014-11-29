@@ -76,14 +76,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="httpClient.h" />
+    <ClInclude Include="MatchException.h" />
     <ClInclude Include="ResponseLexer.h" />
     <ClInclude Include="ResponseParser.h" />
+    <ClInclude Include="StringUtil.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="httpClient.cpp" />
     <ClCompile Include="ResponseLexer.cpp" />
     <ClCompile Include="ResponseParser.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="StringUtil.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="lexerGuide.txt" />
