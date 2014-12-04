@@ -6,8 +6,8 @@ namespace spider {
 
 	class ResponseParser{
 	private:
+		long statusCode;
 		ResponseLexer* lexer;
-
 		void parseStatusLine();
 	public:
 		ResponseParser(){}

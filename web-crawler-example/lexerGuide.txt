@@ -1,0 +1,166 @@
+PREDEFINED RULES
+
+http://en.wikipedia.org/wiki/Augmented_Backus%E2%80%93Naur_Form#Core_rules
++
+UPALPHA        = <any US-ASCII uppercase letter "A".."Z">
+LOALPHA        = <any US-ASCII lowercase letter "a".."z">
+<">            = <US-ASCII double-quote mark (34)>
+
+
+HTTP/1.1 header field values can be folded onto multiple lines if 
+the continuation line begins with a space or horizontal tab. All 
+linear white space, including folding, has the same semantics as 
+SP. A recipient MAY replace any linear white space with a single 
+SP before interpreting the field value or forwarding the message 
+downstream.
+
+LWS            = [CRLF] 1*( SP | HT )
+TEXT           = <any OCTET except CTLs,
+                        but including LWS> NO CR LF
+HEX            = "A" | "B" | "C" | "D" | "E" | "F"
+                | "a" | "b" | "c" | "d" | "e" | "f" | DIGIT
+
+token          = 1*<any CHAR except CTLs or separators>
+separators     = "(" | ")" | "<" | ">" | "@"
+				| "," | ";" | ":" | "\" | <">
+				| "/" | "[" | "]" | "?" | "="
+				| "{" | "}" | SP | HT
+quoted-string  = ( <"> *(qdtext | quoted-pair ) <"> )
+qdtext         = <any TEXT except <">>
+quoted-pair    = "\" CHAR
+
+
+
+
+
+
+
+1.Any response message which "MUST NOT" include a message-body
+(such as the 1xx, 204, and 304 responses and any response to a
+HEAD request) is always terminated by the first empty line 
+after the header fields, regardless of the entity-header 
+fields present in the message.
+
+
+3.If a Content-Length header field (section 14.13) is present,
+its decimal value in OCTETs represents both the entity-length 
+and the transfer-length. The Content-Length header field MUST 
+NOT be sent if these two lengths are different (i.e., if a 
+Transfer-Encoding
+
+STATUS CODES
+- 1xx: Informational - Request received, continuing process
+- 2xx: Success - The action was successfully received,
+understood, and accepted
+- 3xx: Redirection - Further action must be taken in order to
+complete the request
+- 4xx: Client Error - The request contains bad syntax or 
+cannot be fulfilled
+- 5xx: Server Error - The server failed to fulfill an 
+apparently valid request
+
+
+Response      = Status-Line               ; Section 6.1
+                *(( general-header        ; Section 4.5
+                | response-header        ; Section 6.2
+                | entity-header ) CRLF)  ; Section 7.1
+                CRLF
+                [ message-body ]          ; Section 7.2
+
+Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
+
+      Status-Code    =
+            "100"  ; Section 10.1.1: Continue
+          | "101"  ; Section 10.1.2: Switching Protocols
+          | "200"  ; Section 10.2.1: OK
+          | "201"  ; Section 10.2.2: Created
+          | "202"  ; Section 10.2.3: Accepted
+          | "203"  ; Section 10.2.4: Non-Authoritative Information
+          | "204"  ; Section 10.2.5: No Content
+          | "205"  ; Section 10.2.6: Reset Content
+          | "206"  ; Section 10.2.7: Partial Content
+          | "300"  ; Section 10.3.1: Multiple Choices
+          | "301"  ; Section 10.3.2: Moved Permanently
+          | "302"  ; Section 10.3.3: Found
+          | "303"  ; Section 10.3.4: See Other
+          | "304"  ; Section 10.3.5: Not Modified
+          | "305"  ; Section 10.3.6: Use Proxy
+          | "307"  ; Section 10.3.8: Temporary Redirect
+          | "400"  ; Section 10.4.1: Bad Request
+          | "401"  ; Section 10.4.2: Unauthorized
+          | "402"  ; Section 10.4.3: Payment Required
+          | "403"  ; Section 10.4.4: Forbidden
+          | "404"  ; Section 10.4.5: Not Found
+          | "405"  ; Section 10.4.6: Method Not Allowed
+          | "406"  ; Section 10.4.7: Not Acceptable
+          | "407"  ; Section 10.4.8: Proxy Authentication Required
+          | "408"  ; Section 10.4.9: Request Time-out
+          | "409"  ; Section 10.4.10: Conflict
+          | "410"  ; Section 10.4.11: Gone
+          | "411"  ; Section 10.4.12: Length Required
+          | "412"  ; Section 10.4.13: Precondition Failed
+          | "413"  ; Section 10.4.14: Request Entity Too Large
+          | "414"  ; Section 10.4.15: Request-URI Too Large
+          | "415"  ; Section 10.4.16: Unsupported Media Type
+          | "416"  ; Section 10.4.17: Requested range not satisfiable
+          | "417"  ; Section 10.4.18: Expectation Failed
+          | "500"  ; Section 10.5.1: Internal Server Error
+          | "501"  ; Section 10.5.2: Not Implemented
+          | "502"  ; Section 10.5.3: Bad Gateway
+          | "503"  ; Section 10.5.4: Service Unavailable
+          | "504"  ; Section 10.5.5: Gateway Time-out
+          | "505"  ; Section 10.5.6: HTTP Version not supported
+          | extension-code
+extension-code = 3DIGIT
+Reason-Phrase  = *<TEXT, excluding CR, LF>
+
+
+
+response-header = Accept-Ranges           ; Section 14.5
+                | Age                     ; Section 14.6
+                | ETag                    ; Section 14.19
+                | Location                ; Section 14.30
+                | Proxy-Authenticate      ; Section 14.33
+                | Retry-After             ; Section 14.37
+                | Server                  ; Section 14.38
+                | Vary                    ; Section 14.44
+                | WWW-Authenticate        ; Section 14.47
+
+general-header = Cache-Control			   ; Section 14.9
+                | Connection               ; Section 14.10
+                | Date                     ; Section 14.18
+                | Pragma                   ; Section 14.32
+                | Trailer                  ; Section 14.40
+                | Transfer-Encoding        ; Section 14.41
+                | Upgrade                  ; Section 14.42
+                | Via                      ; Section 14.45
+                | Warning                  ; Section 14.46
+
+entity-header  = Allow                     ; Section 14.7
+                | Content-Encoding         ; Section 14.11
+                | Content-Language         ; Section 14.12
+                | Content-Length           ; Section 14.13
+                | Content-Location         ; Section 14.14
+                | Content-MD5              ; Section 14.15
+                | Content-Range            ; Section 14.16
+                | Content-Type             ; Section 14.17
+                | Expires                  ; Section 14.21
+                | Last-Modified            ; Section 14.29
+                | extension-header
+
+extension-header = message-header
+entity-body    = *OCTET
+message-header = field-name ":" [ field-value ]
+field-name     = token
+field-value    = *( field-content | LWS )
+field-content  = <the OCTETs making up the field-value
+                        and consisting of either *TEXT or combinations
+                        of token, separators, and quoted-string>
+
+message-body = entity-body
+              | <entity-body encoded as per Transfer-Encoding>
+
+An entity-body is only present in a message when a message-body is 
+present, as described in section 4.3. The entity-body is obtained 
+from the message-body by decoding any Transfer-Encoding that might
+have been applied to ensure safe and proper transfer of the message.

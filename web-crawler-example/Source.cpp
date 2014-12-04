@@ -16,8 +16,8 @@ void main() {
 	if (sent <= 0) goto FAIL;
 	
 	char * text = client.getResponse();
-	
-	printf(text);
+	harper.parse(text);
+
 	return;
 FAIL:
 	printf("FAIL");

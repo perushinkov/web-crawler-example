@@ -9,7 +9,7 @@ namespace spider {
 		char nextChar();
 		void match(char * txt);
 	public:
-		enum lexemeType {SP, HTTPVERSION};
+		static enum lexemeType {SP, HTTPVERSION};
 		ResponseLexer(char * text); 
 
 		char * getLine();

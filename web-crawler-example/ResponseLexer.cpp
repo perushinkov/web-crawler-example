@@ -4,6 +4,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include "StringUtil.h"
 namespace spider{
 	
 	ResponseLexer::ResponseLexer(char * text) {
@@ -13,15 +14,16 @@ namespace spider{
 
 	char * ResponseLexer::getLine() {
 		int startPosition = this->pos;
-		char current;
-		do {
+		char current = text[pos];
+		while(current != '\n' && current != '\0') {
 			current = this->nextChar();
-		} while(current != '\n' || current != '\0');
+		} 
 		char * line = (char *)malloc(pos - startPosition + 1);
 		line[pos - startPosition] = '\0';
-		//StringUtil.copy(text, line, current - startPosition);
+		stringUtil::copy(text + startPosition, line, pos - startPosition);
+
+		current = this->nextChar();
 		return line;
-		return nullptr;
 	}
 	/**
 	 * Returns '\0' upon reaching end of string.
@@ -56,10 +58,12 @@ namespace spider{
 	 */
 	void ResponseLexer::match(char * txt) {
 		int len = strlen(txt);
+		char current = text[pos];
 		for (int i = 0; i < len; i++) {
-			if (nextChar() != txt[i]) {
+			if (current != txt[i]) {
 				throw new MatchException;
 			}
+			current = nextChar();
 		}
 	}
 
@@ -69,11 +73,11 @@ namespace spider{
 	 */
 	long ResponseLexer::matchNumber() {
 		long num = 0;
-		char current = 0;
+		char current = text[pos];
 		while(current >= '0' && current <= '9') {
-			current = this->nextChar();
 			num *= 10;
 			num += current - '0';
+			current = this->nextChar();
 		}
 		if (current == 0) {
 			throw new MatchException;
