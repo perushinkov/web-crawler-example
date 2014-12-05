@@ -1,6 +1,5 @@
 #include "HttpClient.h"
 #include "ResponseParser.h"
-using namespace spider;
 
 #include <iostream>
 using namespace std;
@@ -17,7 +16,7 @@ void main() {
 	
 	char * text = client.getResponse();
 	harper.parse(text);
-
+	printf("%s", harper.getPageContent());
 	return;
 FAIL:
 	printf("FAIL");

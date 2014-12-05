@@ -75,14 +75,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="httpClient.h" />
+    <ClInclude Include="BinTree.h" />
+    <ClInclude Include="HtmlParser.h" />
+    <ClInclude Include="HttpClient.h" />
     <ClInclude Include="MatchException.h" />
     <ClInclude Include="ResponseLexer.h" />
     <ClInclude Include="ResponseParser.h" />
     <ClInclude Include="StringUtil.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="httpClient.cpp" />
+    <ClCompile Include="BinTree.cpp" />
+    <ClCompile Include="HtmlParser.cpp" />
+    <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="ResponseLexer.cpp" />
     <ClCompile Include="ResponseParser.cpp" />
     <ClCompile Include="Source.cpp" />

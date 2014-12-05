@@ -1,21 +1,23 @@
 #ifndef __RESPONSELEXER_H
 #define __RESPONSELEXER_H 1
 
-namespace spider {
-	class ResponseLexer{
-	private:
-		char * text;
-		int pos;
-		char nextChar();
-		void match(char * txt);
-	public:
-		static enum lexemeType {SP, HTTPVERSION};
-		ResponseLexer(char * text); 
+class ResponseLexer{
+private:
+	char * text;
+	int pos;
+	char nextChar();
+	void match(char * txt);
+public:
+	static enum lexemeType {SP, HTTPVERSION};
+	ResponseLexer(char * text); 
 
-		char * getLine();
-		void rewind();
-		char * getLexeme(lexemeType type);
-		long matchNumber();
-	};
-}
+	char * getLine();
+		
+	void matchSpace();
+	void matchHttpVersion();
+		
+	char * getRemainingText();
+	long matchNumber();
+};
+
 #endif

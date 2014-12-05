@@ -30,6 +30,12 @@
     <ClInclude Include="MatchException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="htmlParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BinTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="httpClient.cpp">
@@ -45,6 +51,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="StringUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="htmlParser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinTree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -2,9 +2,8 @@
 #define __STRINGUTIL_H 1
 #include <string.h>
 
-namespace spider {
-	namespace stringUtil {
-		void copy(char * from, char * to, int numberOfChars);
-	}
+namespace stringUtil {
+	void copy(char * from, char * to, int numberOfChars);
 }
+
 #endif
