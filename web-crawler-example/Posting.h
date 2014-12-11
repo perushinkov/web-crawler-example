@@ -2,6 +2,9 @@
 #define __POSTING_H 1
 /*
  * Holds document id, and number of occurences in the document id.
+ * Must implement 
+ *		int hasKey(void * ptr);
+ *		int equals(void * object);
  */
 
 class Posting {
@@ -12,6 +15,10 @@ public:
 	Posting(int docId);
 	void increment();
 	bool equals(Posting p);
+
+
+	int hasKey(void * ptr);
+	int equals(void * object);
 
 	//Getters and Setters
 	int getDocId();

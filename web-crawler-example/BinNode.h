@@ -14,8 +14,8 @@ private:
 public:
 	BinNode();
 	BinNode(BinNode * parent, T * content);
-	bool find(T);
-
+	T * findByKey(void * key);
+	bool add(T * content);
 };
 
 #endif

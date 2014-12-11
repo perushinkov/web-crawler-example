@@ -19,6 +19,30 @@ bool Posting::equals(Posting t) {
 	return false;
 }
 
+/**
+ *
+ */
+
+int Posting::hasKey(void * ptr) {
+	if (docId == *((char*)ptr)) {
+		return 0;
+	}
+	if (docId > *((char*)ptr)) {
+		return 1;
+	}
+	return -1;
+}
+int Posting::equals(void * object) {
+	if (this->docId > ((Posting*)object)->getDocId()) {
+		return 1;
+	}
+	if (this->docId < ((Posting*)object)->getDocId()) {
+		return -1;
+	}
+	return 0;
+}
+
+
 int Posting::getDocId() {
 	return docId;
 }

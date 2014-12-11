@@ -1,5 +1,6 @@
 #include "HttpClient.h"
 #include "ResponseParser.h"
+#include "BinNode.h"
 
 #include <iostream>
 using namespace std;

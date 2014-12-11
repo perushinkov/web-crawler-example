@@ -1,6 +1,6 @@
-#include "ResponseParser.h";
-#include "ResponseLexer.h";
-#include <iostream>;
+#include "ResponseParser.h"
+#include "ResponseLexer.h"
+#include <iostream>
 using namespace std;
 
 ResponseParser::ResponseParser() {

@@ -76,7 +76,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="BinNode.h" />
-    <ClInclude Include="BinTree.h" />
     <ClInclude Include="HtmlParser.h" />
     <ClInclude Include="HttpClient.h" />
     <ClInclude Include="MatchException.h" />
@@ -88,7 +87,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BinNode.cpp" />
-    <ClCompile Include="BinTree.cpp" />
     <ClCompile Include="HtmlParser.cpp" />
     <ClCompile Include="HttpClient.cpp" />
     <ClCompile Include="IndexValue.cpp" />
