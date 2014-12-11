@@ -1,5 +1,5 @@
 #include "BinTree.h"
-
-BinTree::BinTree() {
-
+template <class T>
+BinTree<T>::BinTree() {
+	root = nullptr;
 }

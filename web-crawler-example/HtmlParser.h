@@ -8,7 +8,7 @@ class HtmlParser {
 private:
 public:
 	HtmlParser();
-
+	
 };
 
 #endif
