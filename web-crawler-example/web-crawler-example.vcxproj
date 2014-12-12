@@ -75,29 +75,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="BinNode.h" />
-    <ClInclude Include="HtmlParser.h" />
-    <ClInclude Include="HttpClient.h" />
-    <ClInclude Include="MatchException.h" />
-    <ClInclude Include="IndexValue.h" />
-    <ClInclude Include="Posting.h" />
-    <ClInclude Include="ResponseLexer.h" />
-    <ClInclude Include="ResponseParser.h" />
-    <ClInclude Include="StringUtil.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="BinNode.cpp" />
-    <ClCompile Include="HtmlParser.cpp" />
-    <ClCompile Include="HttpClient.cpp" />
-    <ClCompile Include="IndexValue.cpp" />
-    <ClCompile Include="Posting.cpp" />
-    <ClCompile Include="ResponseLexer.cpp" />
-    <ClCompile Include="ResponseParser.cpp" />
-    <ClCompile Include="Source.cpp" />
-    <ClCompile Include="StringUtil.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="lexerGuide.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\client\HttpClient.h" />
+    <ClInclude Include="src\client\ResponseLexer.h" />
+    <ClInclude Include="src\client\ResponseParser.h" />
+    <ClInclude Include="src\Crawler.h" />
+    <ClInclude Include="src\htmlparser\HtmlParser.h" />
+    <ClInclude Include="src\invertedIndex\InvertedIndexValue.h" />
+    <ClInclude Include="src\invertedIndex\Posting.h" />
+    <ClInclude Include="src\sitemap\SiteMap.h" />
+    <ClInclude Include="src\utils\BinNode.h" />
+    <ClInclude Include="src\utils\MatchException.h" />
+    <ClInclude Include="src\utils\StringUtil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\client\HttpClient.cpp" />
+    <ClCompile Include="src\client\ResponseLexer.cpp" />
+    <ClCompile Include="src\client\ResponseParser.cpp" />
+    <ClCompile Include="src\Crawler.cpp" />
+    <ClCompile Include="src\htmlparser\HtmlParser.cpp" />
+    <ClCompile Include="src\invertedIndex\InvertedIndexValue.cpp" />
+    <ClCompile Include="src\invertedIndex\Posting.cpp" />
+    <ClCompile Include="src\sitemap\SiteMap.cpp" />
+    <ClCompile Include="src\utils\BinNode.cpp" />
+    <ClCompile Include="src\utils\StringUtil.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

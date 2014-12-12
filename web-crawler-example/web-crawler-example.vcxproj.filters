@@ -13,68 +13,107 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="httpClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResponseParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ResponseLexer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StringUtil.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MatchException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="htmlParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BinNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="IndexValue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Posting.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="httpClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResponseParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ResponseLexer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StringUtil.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="htmlParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="BinNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="IndexValue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Posting.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <Filter Include="Header Files\client">
+      <UniqueIdentifier>{71763fc4-1b85-4bbc-982e-90a62f278dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\invertedIndex">
+      <UniqueIdentifier>{6b2b6dea-e924-43a7-a1db-ccbabad42b77}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{0ec356ca-f4fc-47c8-b7c1-6ba1a32d925c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\sitemap">
+      <UniqueIdentifier>{c66fb661-3cfe-4d9f-90ce-2801b1b5c4db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\htmlparser">
+      <UniqueIdentifier>{d065e640-da48-4045-b080-3200d87853fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\client">
+      <UniqueIdentifier>{32fccbcb-7ef0-4186-99e4-9867616b4b17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\invertedIndex">
+      <UniqueIdentifier>{76e09860-1f44-4853-9e03-bfe41a5e869f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\htmlparser">
+      <UniqueIdentifier>{06e290e6-b5ef-45e8-bde3-0a38788ed920}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{15e768db-aef9-43e0-8f27-4299d1ee9fca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\sitemap">
+      <UniqueIdentifier>{9497cdaf-9e2f-4a79-a097-ffc5673521ec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="lexerGuide.txt">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\client\HttpClient.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\ResponseLexer.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="src\client\ResponseParser.h">
+      <Filter>Header Files\client</Filter>
+    </ClInclude>
+    <ClInclude Include="src\htmlparser\HtmlParser.h">
+      <Filter>Header Files\htmlparser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\invertedIndex\InvertedIndexValue.h">
+      <Filter>Header Files\invertedIndex</Filter>
+    </ClInclude>
+    <ClInclude Include="src\invertedIndex\Posting.h">
+      <Filter>Header Files\invertedIndex</Filter>
+    </ClInclude>
+    <ClInclude Include="src\sitemap\SiteMap.h">
+      <Filter>Header Files\sitemap</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\BinNode.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\MatchException.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\StringUtil.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Crawler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\client\HttpClient.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="src\client\ResponseLexer.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="src\client\ResponseParser.cpp">
+      <Filter>Source Files\client</Filter>
+    </ClCompile>
+    <ClCompile Include="src\htmlparser\HtmlParser.cpp">
+      <Filter>Source Files\htmlparser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\invertedIndex\InvertedIndexValue.cpp">
+      <Filter>Source Files\invertedIndex</Filter>
+    </ClCompile>
+    <ClCompile Include="src\invertedIndex\Posting.cpp">
+      <Filter>Source Files\invertedIndex</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sitemap\SiteMap.cpp">
+      <Filter>Source Files\sitemap</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\BinNode.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\StringUtil.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Crawler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
