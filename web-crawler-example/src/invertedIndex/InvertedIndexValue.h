@@ -1,7 +1,7 @@
-#ifndef __INDEXVALUE_H
-#define __INDEXVALUE_H 1
+#ifndef __INVERTEDINDEXVALUE_H
+#define __INVERTEDINDEXVALUE_H 1
 #include "Posting.h"
-#include "BinNode.h"
+#include "../utils/BinNode.h"
 /*
  * TODO: Finish this
  * Must implement 
@@ -9,12 +9,12 @@
  *		int equals(void * object);
  */
 
-class IndexValue {
+class InvertedIndexValue {
 private:
 	char * word;
 	BinNode<Posting> * posts;
 public:
-	IndexValue(char * word);
+	InvertedIndexValue(char * word);
 	void addOccurence(int docId);
 
 	int hasKey(void * ptr);

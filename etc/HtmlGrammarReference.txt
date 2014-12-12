@@ -1,0 +1,81 @@
+
+  document ::= Misc* (doctypedecl Misc*)? element Misc* 
+Misc
+=> <space> => S
+=> <!--    => Comment
+=> <?      => PI
+
+doctypedecl
+=> <!DOCTYPE
+
+element
+=> <[_:A-Za-z]
+
+
+  	content ::= (element | CharData | Reference | PI | Comment)*
+element
+=><[_:A-Za-z]
+CharData
+=>[^<&]
+Reference
+=> &
+PI
+=><?
+Comment
+=><!--
+
+
+  
+Attribute:        [_:A-Za-z]
+beginTag:         [<]	
+Char:             <CR>,<tab>,<LF>,[<space>-255]
+CharData:         [^<&]
+Comment:          [<]
+compoundTagFinish:[>]
+COPFinish:        [!?]
+doctypedecl:      [<]
+Digit:            [0-9]
+document:         []
+element:          '<'
+emptyTagFinish:   [/]
+Eq:               <space>,<tab>,<CR>,<LF>, '='
+Etag:             [<]
+finishTag:        [/>]
+Letter:           [A-Za-z]
+Misc:             ******************************************
+Name:             [_:A-Za-z]
+NameChar:         [.-_:A-Za-z0-9]
+PI:               [<]
+Reference:        [&]
+S:                <CR>,<tab>,<LF>,<space>
+SystemLiteral:    ["']
+
+		
+
+
+
+
+
+Attribute ::= Name Eq SystemLiteral
+beginTag ::= '<' Name (S Attribute)* S?
+Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
+CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
+Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
+compoundTagFinish ::= '>' content ETag
+content ::= (element | CharData | Reference | PI | Comment)*
+Digit ::= '0'..'9'
+doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
+document ::= Misc* (doctypedecl Misc*)? element Misc* 
+Eq ::= S? '=' S?
+finishTag ::= emptyTagFinish | compoundTagFinish
+element ::= beginTag finishTag
+emptyTagFinish ::= '/>'
+ETag ::= '</' Name S? '>'
+Letter ::= [A-Za-z]
+Misc ::= Comment | PI |  S
+Name ::= (Letter | '_' | ':') (NameChar)*
+NameChar ::= Letter | Digit | '.' | '-' | '_' | ':';
+PI ::= '<?' <^[?]> '?>'
+Reference ::= '&' Name ';' | '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
+S ::= (<space>(32) | <tab>(9) | <CR>(13) | <LF>(10))+
+SystemLiteral	::=	('"' [^"]* '"') | ("'" [^']* "'")

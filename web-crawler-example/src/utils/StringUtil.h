@@ -4,6 +4,7 @@
 
 namespace stringUtil {
 	void copy(char * from, char * to, int numberOfChars);
+	bool contains(char * subject, char containee);
 }
 
 #endif

@@ -1,9 +1,14 @@
 #include "HttpClient.h"
 
-#define RESPONSE_MAX_LENGTH 10000
+#define RESPONSE_MAX_LENGTH 20000
 
-HttpClient::HttpClient(long serverPort, string serverIp){
-	this->serverPort = serverPort;
+HttpClient::HttpClient(){
+	this->serverIp = "127.0.0.1";
+	this->serverPort = 80;
+	this->parser = new ResponseParser();
+}
+
+void HttpClient::init(char * serverIp){
 	this->serverIp = serverIp;
 	
 	errorCode = 0;
@@ -40,13 +45,15 @@ HttpClient::HttpClient(long serverPort, string serverIp){
 	my_addr.sin_port = htons(serverPort);
 
 	memset(&(my_addr.sin_zero), 0, 8);
-	my_addr.sin_addr.s_addr = inet_addr(serverIp.c_str());
+	my_addr.sin_addr.s_addr = inet_addr(serverIp);
 
 	if (connect(sock, (sockaddr *)&my_addr, sizeof(my_addr))) {
 		errorCode = 3;
 		return;
 	}
 }
+
+
 /**
  *	Performs a standard HTTP request, filling in 
  *	the requestUri and the host name, as shown below:
@@ -57,14 +64,15 @@ HttpClient::HttpClient(long serverPort, string serverIp){
  *
  *	The last empty line matters! It signifies the end of the HTTP request.
  */
-int HttpClient::request(string requestUri, string host) {
-	string queryString = "GET ";
-	queryString+= requestUri;
-	queryString+= " HTTP/1.1\n";
-	queryString+= "host: ";
-	queryString+= host;
-	queryString+= "\n\n";
-	return send(sock, queryString.c_str(), queryString.length(), 0);
+int HttpClient::request(char * requestUri, char * host) {
+	char * query = (char *)malloc(100);
+	query[0] = '\0';
+	strcat(query, "GET ");
+	strcat(query, requestUri);
+	strcat(query, " HTTP/1.1\nhost:");
+	strcat(query, host);
+	strcat(query, "\n\n");
+	return send(sock, query, strlen(query), 0);
 }
 /**
  * Fetches HTTP response.
@@ -88,4 +96,13 @@ char * HttpClient::getResponse() {
 	//Then we free the originally allocated memory, which we no longer need.
 	free(text);
 	return returnText;
+}
+
+/**
+ * Fetches Html page
+ */
+char * HttpClient::getPage() {
+	char * response = getResponse();
+	parser->parse(response);
+	return parser->getPageContent();
 }

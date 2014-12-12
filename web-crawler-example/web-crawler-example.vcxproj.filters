@@ -53,9 +53,6 @@
     <ClInclude Include="src\client\HttpClient.h">
       <Filter>Header Files\client</Filter>
     </ClInclude>
-    <ClInclude Include="src\client\ResponseLexer.h">
-      <Filter>Header Files\client</Filter>
-    </ClInclude>
     <ClInclude Include="src\client\ResponseParser.h">
       <Filter>Header Files\client</Filter>
     </ClInclude>
@@ -83,12 +80,18 @@
     <ClInclude Include="src\Crawler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\invertedIndex\InvertedIndex.h">
+      <Filter>Header Files\invertedIndex</Filter>
+    </ClInclude>
+    <ClInclude Include="src\htmlparser\StraightIndexValue.h">
+      <Filter>Header Files\htmlparser</Filter>
+    </ClInclude>
+    <ClInclude Include="src\utils\Lexer.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\client\HttpClient.cpp">
-      <Filter>Source Files\client</Filter>
-    </ClCompile>
-    <ClCompile Include="src\client\ResponseLexer.cpp">
       <Filter>Source Files\client</Filter>
     </ClCompile>
     <ClCompile Include="src\client\ResponseParser.cpp">
@@ -114,6 +117,15 @@
     </ClCompile>
     <ClCompile Include="src\Crawler.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\invertedIndex\InvertedIndex.cpp">
+      <Filter>Source Files\invertedIndex</Filter>
+    </ClCompile>
+    <ClCompile Include="src\htmlparser\StraightIndexValue.cpp">
+      <Filter>Source Files\htmlparser</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils\Lexer.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

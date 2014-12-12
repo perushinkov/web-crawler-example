@@ -1,21 +1,21 @@
-#include "IndexValue.h"
-#include "StringUtil.h"
+#include "InvertedIndexValue.h"
+#include "../utils/StringUtil.h"
 
-int IndexValue::hasKey(void * key) {
+int InvertedIndexValue::hasKey(void * key) {
 	return strcmp((char *)key, this->word);
 }
 
-int IndexValue::equals(void * object) {
-	return strcmp(word, ((IndexValue *)object)->getWord());
+int InvertedIndexValue::equals(void * object) {
+	return strcmp(word, ((InvertedIndexValue *)object)->getWord());
 }
 
-IndexValue::IndexValue(char * word) {
+InvertedIndexValue::InvertedIndexValue(char * word) {
 	this->word = word;
 }
 
-void IndexValue::addOccurence(int docId) {
+void InvertedIndexValue::addOccurence(int docId) {
 	//TODO
 }
-char * IndexValue::getWord() {
+char * InvertedIndexValue::getWord() {
 	return word;
 }

@@ -1,4 +1,4 @@
-#include "ResponseLexer.h"
+#include "Lexer.h"
 #include "StringUtil.h"
 #include "MatchException.h"
 
@@ -8,12 +8,12 @@ using namespace std;
 #include <string.h>
 #include "StringUtil.h"
 
-ResponseLexer::ResponseLexer(char * text) {
+Lexer::Lexer(char * text) {
 	this->text = text;
 	pos = 0;
 }
 
-char * ResponseLexer::getLine() {
+char * Lexer::getLine() {
 	int startPosition = this->pos;
 	char current = text[pos];
 	while(current != '\n' && current != '\0') {
@@ -30,12 +30,12 @@ char * ResponseLexer::getLine() {
 	* Returns '\0' upon reaching end of string.
 	* Caller is responsible for not calling nextChar() when there is no next char.
 	*/
-char ResponseLexer::nextChar() {
+char Lexer::nextChar() {
 	pos++;
 	return text[pos];
 }
 
-char * ResponseLexer::getRemainingText() {
+char * Lexer::getRemainingText() {
 	int charsRemaining = strlen(text + pos);
 	char * remainder = (char *)malloc(charsRemaining + 1);
 	remainder[charsRemaining] = '\0';
@@ -43,11 +43,11 @@ char * ResponseLexer::getRemainingText() {
 	return remainder;
 }
 
-void ResponseLexer::matchSpace() {
+void Lexer::matchSpace() {
 	nextChar();
 }
 //HTTP-Version   = "HTTP" "/" 1*DIGIT "." 1*DIGIT
-void ResponseLexer::matchHttpVersion() {
+void Lexer::matchHttpVersion() {
 		match("HTTP/");
 		matchNumber();
 		match(".");
@@ -61,7 +61,7 @@ void ResponseLexer::matchHttpVersion() {
 	* Reads from the text the text that is sent as parameter.
 	* If it is not the same function returns false.
 	*/
-void ResponseLexer::match(char * txt) {
+void Lexer::match(char * txt) {
 	int len = strlen(txt);
 	char current = text[pos];
 	for (int i = 0; i < len; i++) {
@@ -76,7 +76,7 @@ void ResponseLexer::match(char * txt) {
 	* Reads from the text a number.
 	* If the text does not start with a digit returns false.
 	*/
-long ResponseLexer::matchNumber() {
+long Lexer::matchNumber() {
 	long num = 0;
 	char current = text[pos];
 	while(current >= '0' && current <= '9') {
@@ -90,3 +90,7 @@ long ResponseLexer::matchNumber() {
 	return num;
 }
 
+
+char Lexer::lookahead(int howmuch) {
+	return *(text + howmuch);
+}

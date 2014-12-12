@@ -8,38 +8,25 @@ Posting::Posting(int docId) {
 void Posting::increment() {
 	this->occurences++;
 }
-/**
- * Two postings are considered equal if their docIds are equal.
- * That is so that they are sorted by docIds in binary tree.
- */
-bool Posting::equals(Posting t) {
-	if (t.getDocId() == this->docId) {
-		return true; 
-	}
-	return false;
-}
-
-/**
- *
- */
 
 int Posting::hasKey(void * ptr) {
-	if (docId == *((char*)ptr)) {
+	if (docId == *((int*)ptr)) {
 		return 0;
 	}
-	if (docId > *((char*)ptr)) {
+	if (docId > *((int*)ptr)) {
 		return 1;
 	}
 	return -1;
 }
+/**
+ * Two postings are considered equal if their docIds are equal.
+ * That is so that they are sorted by docIds in binary tree.
+ */
 int Posting::equals(void * object) {
-	if (this->docId > ((Posting*)object)->getDocId()) {
-		return 1;
-	}
-	if (this->docId < ((Posting*)object)->getDocId()) {
-		return -1;
-	}
-	return 0;
+
+	int objectDocId = ((Posting*)object)->getDocId();
+	void * p_int = &objectDocId; 
+	return this->hasKey(p_int);
 }
 
 

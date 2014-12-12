@@ -1,5 +1,5 @@
 #include "ResponseParser.h"
-#include "ResponseLexer.h"
+#include "../utils/Lexer.h"
 #include <iostream>
 using namespace std;
 
@@ -16,7 +16,7 @@ void ResponseParser::parse(char * t) {
 		delete lexer;
 	}
 	statusCode = 0;
-	lexer = new ResponseLexer(t);
+	lexer = new Lexer(t);
 		
 	parseStatusLine();
 	parseHeaders();

@@ -1,13 +1,21 @@
-#include "HttpClient.h"
-#include "ResponseParser.h"
-#include "BinNode.h"
+#include "Crawler.h"
 
 #include <iostream>
 using namespace std;
 
+Crawler::Crawler() {
+	client = new HttpClient();
+	siteMap = new SiteMap();
+	htmlParser = new HtmlParser();
+	invertedIndex = new InvertedIndex();
+}
+void Crawler::crawl(char * startingAddress) {
+	client->init(startingAddress);
+	client->request("/iisstart.htm", "127.0.0.1");
+	char * page = client->getPage();
+}
+	/*
 
-void main() {
-	HttpClient client(80, "127.0.0.1");
 	ResponseParser harper;
 
 	if (client.error()) goto FAIL;
@@ -20,5 +28,9 @@ void main() {
 	printf("%s", harper.getPageContent());
 	return;
 FAIL:
-	printf("FAIL");
+	printf("FAIL");*/
+
+void main() {
+	Crawler myCrawler;
+	myCrawler.crawl("127.0.0.1");
 }

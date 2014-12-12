@@ -1,12 +1,12 @@
 #ifndef __RESPONSEPARSER_H
 #define __RESPONSEPARSER_H 1
-#include "ResponseLexer.h"
+#include "../utils/Lexer.h"
 
 class ResponseParser{
 private:
 	long statusCode;
 	char * pageContent;
-	ResponseLexer* lexer;
+	Lexer* lexer;
 
 
 	void parseStatusLine();
