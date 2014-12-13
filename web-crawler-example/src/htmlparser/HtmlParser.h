@@ -4,13 +4,15 @@
 #include "..\utils\Lexer.h"
 #include "StraightIndexValue.h"
 /*
- * TODO: Finish this
+ * XHTML parser.
+ * Note: it currently doesn't support some misformed tags that
+ * HTML supports. (missing closing tags, etc)
  */
 class HtmlParser {
 private:
 	enum rules {ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
 		DIGIT, DOCTYPEDECL, DOCUMENT, EQ, FINISHTAG, ELEMENT, EMPTYTAGFINISH, ETAG, 
-		LETTER, MISC, NAME, NAMECHAR, PI_enum, REFERENCE, S_enum, SYSTEMLITERAL};
+		LETTER, MISC, NAME, NAMECHAR, PI_enum, REFERENCE, S_enum, SYSTEMLITERAL, WORD};
 
 	BinNode<StraightIndexValue> * index;
 	Lexer * lexer;
@@ -25,7 +27,7 @@ public:
 	//beginTag ::= '<' Name (S Attribute)*
 	void beginTag();
 	//Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
-	void Char();
+	//			lexer->nextChar();
 	//CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
 	void CharData();
 	//Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
@@ -35,7 +37,7 @@ public:
 	//content ::= (element | CharData | Reference | PI | Comment)*
 	void content();
 	//Digit ::= '0'..'9'
-	void Digit();
+	//			lexer->nextChar();
 	//doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
 	void doctypedecl();
 	//document ::= Misc* (doctypedecl Misc*)? element Misc* 
@@ -57,13 +59,13 @@ public:
 	//Name ::= (Letter | '_' | ':') (NameChar)*
 	void Name();
 	//NameChar ::= Letter | Digit | '.' | '-' | '_' | ':';
-	void NameChar();
+	//		lexer->nextChar();
 	//PI ::= '<?' <^[?]> '?>'
 	void PI();
 	//Reference ::= '&' Name ';' | '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
 	void Reference();
 	//S ::= (<space>(32) | <tab>(9) | <CR>(13) | <LF>(10))+
-	void S();
+	//		lexer->nextChar();
 	//SystemLiteral	::=	('"' [^"]* '"') | ("'" [^']* "'")
 	void SystemLiteral();
 };

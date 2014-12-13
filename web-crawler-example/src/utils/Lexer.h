@@ -15,11 +15,15 @@ public:
 	char * getLine();
 	
 	void match(char * txt);
+	void matchUntil(char * txt);
+
+	bool isNext(char * txt);
 	void matchSpace();
 	void matchHttpVersion();
 		
 	char * getRemainingText();
 	long matchNumber();
+	char * matchWord();
 	char lookahead(int howmuch);
 };
 

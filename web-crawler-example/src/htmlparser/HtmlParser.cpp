@@ -1,5 +1,7 @@
 #include "HtmlParser.h"
 #include "../utils/StringUtil.h"
+#include "../utils/MatchException.h"
+
 HtmlParser::HtmlParser() {
 	this->lexer = nullptr;
 	this->index = nullptr;
@@ -35,14 +37,21 @@ void HtmlParser::beginTag() {
 //lexer->nextChar();	
 
 //CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
+// OR
+//CharData ::= (Word | [^<&A-Za-z])*
 void HtmlParser::CharData() {
-	//TODO
+	while (follows(rules::CHARDATA)) {
+		if (follows(rules::WORD)) {
+			lexer->matchWord();
+		} else {
+			lexer->nextChar();
+		}
+	}
 }
 //Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
 void HtmlParser::Comment() {
 	lexer->match("<!--");
-	//TODO
-	//lexer->matchUntil("-->");
+	lexer->matchUntil("-->");
 	lexer->match("-->");
 }
 //compoundTagFinish ::= '>' content ETag
@@ -53,20 +62,43 @@ void HtmlParser::compoundTagFinish() {
 }
 //content ::= (element | CharData | Reference | PI | Comment)*
 void HtmlParser::content() {
-	//TODO
+	if (follows(rules::ELEMENT)) {
+		element();
+	} else if (follows(rules::CHARDATA)) {
+		CharData();
+	} else if (follows(rules::REFERENCE)) {
+		Reference();
+	} else if (follows(rules::PI_enum)) {
+		PI();
+	} else if (follows(rules::COMMENT)) {
+		Comment();
+	} else {
+		throw new MatchException();
+	}
 }
-//Digit ::= '0'..'9'
-//lexer->nextChar();
-
 //doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
 void HtmlParser::doctypedecl() {
 	lexer->match("<!DOCTYPE");
-	//lexer->matchUntil(">");
+	lexer->matchUntil(">");
 	lexer->match(">");
 }
 //document ::= Misc* (doctypedecl Misc*)? element Misc* 
 void HtmlParser::document() {
-	//TODO
+	while (follows(rules::MISC)) {
+		Misc();
+	}
+	if (follows(rules::DOCTYPEDECL)) {
+		doctypedecl();
+		while (follows(rules::MISC)) {
+			Misc();
+		}
+	}
+	
+	element();
+
+	while (follows(rules::MISC)) {
+		Misc();
+	}
 }
 //Eq ::= S? '=' S?
 void HtmlParser::Eq() {
@@ -80,7 +112,13 @@ void HtmlParser::Eq() {
 }
 //finishTag ::= emptyTagFinish | compoundTagFinish
 void HtmlParser::finishTag() {
-
+	if (follows(rules::EMPTYTAGFINISH)) {
+		emptyTagFinish();
+	} else if(follows(rules::COMPOUNDTAGFINISH)) {
+		compoundTagFinish();
+	} else {
+		throw new MatchException();
+	}
 }
 //element ::= beginTag finishTag
 void HtmlParser::element() {
@@ -98,15 +136,22 @@ void HtmlParser::ETag() {
 	if (follows(rules::S_enum)) {
 		lexer->nextChar();
 	}
-
+	lexer->match(">");
 }
 //Letter ::= [A-Za-z]
 //lexer->nextChar();
 
 //Misc ::= Comment | PI |  S
 void HtmlParser::Misc() {
-	//TODO
+	if (follows(rules::S_enum)) {
+		lexer->nextChar();
+	} else if (follows(rules::COMMENT)) {
+		Comment();
+	} else {
+		PI();
+	}
 }
+
 //Name ::= (Letter | '_' | ':') (NameChar)*
 void HtmlParser::Name() {
 	lexer->nextChar();
@@ -120,8 +165,7 @@ void HtmlParser::Name() {
 //PI ::= '<?' <^[?]> '?>'
 void HtmlParser::PI() {
 	lexer->match("<?");
-	//TODO
-	//lexer->matchUntil("?");
+	lexer->matchUntil("?>");
 	lexer->match("?>");
 }
 //Reference ::= ('&' Name | '&#' [0-9]+ | '&#x' [0-9a-fA-F]+) ';'
@@ -134,8 +178,7 @@ void HtmlParser::Reference() {
 		if (lexer->lookahead(0) == 'x') {
 			lexer->match("x");
 		}
-		//TODO
-		//lexer->matchUntil(";");
+		lexer->matchUntil(";");
 	}
 	lexer->match(";");
 }
@@ -146,19 +189,19 @@ void HtmlParser::Reference() {
 void HtmlParser::SystemLiteral() {
 	char current = lexer->lookahead(0);
 	if (current == '"') {
-		//TODO
-		//matchUntil("\"");
+		lexer->matchUntil("\"");
 	} else if (current == '\'') {
-		//TODO
-		//matchUntil("'");
+		lexer->matchUntil("'");
 	} else {
-		//TODO
-		//throw something here
+		throw new MatchException();
 	}
 }
 
-
-
+/**
+ * Takes a look at the following symbol (or symbols where needed), 
+ * and returns true if is unambiguously certain that the given rule 
+ * is the one that follows .
+ */
 bool HtmlParser::follows(rules rule) {
 	char val = lexer->lookahead(0);
 
@@ -182,8 +225,8 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
-	case rules::COMMENT: // [<]
-		if (val == '<') {
+	case rules::COMMENT: // Must differentiate from PI
+		if (lexer->isNext("<!-")) {
 			return true;
 		}
 		break;
@@ -197,8 +240,8 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
-	case rules::DOCTYPEDECL: // [<]
-		if (val == '<') {
+	case rules::DOCTYPEDECL: // Must differentiate from element
+		if (lexer->isNext("<!D")) {
 			return true;
 		}
 		break;
@@ -212,9 +255,18 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
-	case rules::ELEMENT: // [<]
-		return follows(rules::BEGINTAG);
+	case rules::ELEMENT: // <[_:A-Za-z]
+	{
+		char val2 = lexer->lookahead(1);
+		if (val == '<' 
+			&& (val2 == '_' 
+				|| val2 == ':'
+				|| (val2 >= 'A' && val2 <= 'Z')
+				|| (val2 >= 'a' && val2 <= 'z'))) {
+			return true;
+		}
 		break;
+	}
 	case rules::EMPTYTAGFINISH: // [/]
 		if (val == '/') {
 			return true;
@@ -231,8 +283,11 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
-	case rules::MISC: // [ \r\t\n<]
-		if (stringUtil::contains(" \r\t\n<", val)) {
+	case rules::MISC:
+		// NonTrivial. Needs to return true only when what 
+		// follows is just Misc and not doctypedecl or element
+		// because of document rule:
+		if (follows(rules::S_enum) || lexer->isNext("<?") || lexer->isNext("<!--")) {
 			return true;
 		}
 		break;
@@ -271,6 +326,11 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
+	case rules::WORD: // [A-Za-z]
+		if ((val >= 'a' && val <= 'z')
+			|| (val >= 'A' && val <= 'Z')) {
+			return true;
+		}
 	}
 	return false;
 }

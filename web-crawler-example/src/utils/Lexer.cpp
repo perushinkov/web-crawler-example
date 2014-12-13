@@ -27,9 +27,9 @@ char * Lexer::getLine() {
 	return line;
 }
 /**
-	* Returns '\0' upon reaching end of string.
-	* Caller is responsible for not calling nextChar() when there is no next char.
-	*/
+ * Returns '\0' upon reaching end of string.
+ * Caller is responsible for not calling nextChar() when there is no next char.
+ */
 char Lexer::nextChar() {
 	pos++;
 	return text[pos];
@@ -58,9 +58,9 @@ void Lexer::matchHttpVersion() {
 
 
 /**
-	* Reads from the text the text that is sent as parameter.
-	* If it is not the same function returns false.
-	*/
+ * Reads from the text the text that is sent as parameter.
+ * If it is not the same function returns false.
+ */
 void Lexer::match(char * txt) {
 	int len = strlen(txt);
 	char current = text[pos];
@@ -71,11 +71,32 @@ void Lexer::match(char * txt) {
 		current = nextChar();
 	}
 }
+/**
+ * Matches text until it meets a certain expression txt. 
+ * Does not match this expression.
+ * 
+ * Example:
+ * TextRemaining: "we are! They are, you are!"
+ *	matchUntil("are,");
+ * TextRemaining after call: "are, you are!"
+ */
+void Lexer::matchUntil(char * txt) {
+	pos += stringUtil::findAinB(txt, text + pos);
+}
+
+
+bool Lexer::isNext(char * txt) {
+	int relPos = stringUtil::findAinB(txt, text + pos);
+	if (relPos == 0) {
+		return true;
+	}
+	return false;
+}
 
 /**
-	* Reads from the text a number.
-	* If the text does not start with a digit returns false.
-	*/
+ * Reads from the text a number.
+ * If the text does not start with a digit returns false.
+ */
 long Lexer::matchNumber() {
 	long num = 0;
 	char current = text[pos];
@@ -89,8 +110,25 @@ long Lexer::matchNumber() {
 	}
 	return num;
 }
+/**
+ * Matches word containing English letters.
+ * Words are reduced to lowerCase.
+ */
+char * Lexer::matchWord() {
+	int startPos = pos;
+	char current = text[pos];
+	while((current >= 'A' && current <= 'Z')
+		  || (current >= 'a' && current <= 'a')) {
+		current = this->nextChar();
+	}
+	if (current == 0) {
+		throw new MatchException;
+	}
 
-
+	char * word = stringUtil::substring(text + startPos, pos - startPos);
+	stringUtil::toLower(word);
+	return word;
+}
 char Lexer::lookahead(int howmuch) {
 	return *(text + howmuch);
 }
