@@ -3,8 +3,14 @@
 #include <string.h>
 
 namespace stringUtil {
-	void copy(char * from, char * to, int numberOfChars);
+	int compare(char * a, char * b);
 	bool contains(char * subject, char containee);
+	void copy(char * from, char * to, int numberOfChars);
+	int findAinB(char * a, char * b);
+	int length(char * a);
+
+	char * substring(char * text, int len);
+	void toLower(char * text);
 }
 
 #endif
