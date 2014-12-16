@@ -62,18 +62,20 @@ void HtmlParser::compoundTagFinish() {
 }
 //content ::= (element | CharData | Reference | PI | Comment)*
 void HtmlParser::content() {
-	if (follows(rules::ELEMENT)) {
-		element();
-	} else if (follows(rules::CHARDATA)) {
-		CharData();
-	} else if (follows(rules::REFERENCE)) {
-		Reference();
-	} else if (follows(rules::PI_enum)) {
-		PI();
-	} else if (follows(rules::COMMENT)) {
-		Comment();
-	} else {
-		throw new MatchException();
+	while(true) {
+		if (follows(rules::ELEMENT)) {
+			element();
+		} else if (follows(rules::CHARDATA)) {
+			CharData();
+		} else if (follows(rules::REFERENCE)) {
+			Reference();
+		} else if (follows(rules::PI_enum)) {
+			PI();
+		} else if (follows(rules::COMMENT)) {
+			Comment();
+		} else {
+			break;
+		}
 	}
 }
 //doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
@@ -189,9 +191,13 @@ void HtmlParser::Reference() {
 void HtmlParser::SystemLiteral() {
 	char current = lexer->lookahead(0);
 	if (current == '"') {
+		lexer->nextChar();
 		lexer->matchUntil("\"");
+		lexer->match("\"");
 	} else if (current == '\'') {
+		lexer->nextChar();
 		lexer->matchUntil("'");
+		lexer->match("'");
 	} else {
 		throw new MatchException();
 	}
@@ -306,8 +312,8 @@ bool HtmlParser::follows(rules rule) {
 			return true;
 		}
 		break;
-	case rules::PI_enum: // [<]
-		if (val == '<') {
+	case rules::PI_enum: // <?
+		if (lexer->isNext("<?")) {
 			return true;
 		}
 		break;

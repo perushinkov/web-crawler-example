@@ -32,6 +32,7 @@ char * Lexer::getLine() {
  */
 char Lexer::nextChar() {
 	pos++;
+	char * rem = text + pos;
 	return text[pos];
 }
 
@@ -63,6 +64,8 @@ void Lexer::matchHttpVersion() {
  */
 void Lexer::match(char * txt) {
 	int len = strlen(txt);
+
+	char * remaining = text + pos;
 	char current = text[pos];
 	for (int i = 0; i < len; i++) {
 		if (current != txt[i]) {
@@ -130,5 +133,5 @@ char * Lexer::matchWord() {
 	return word;
 }
 char Lexer::lookahead(int howmuch) {
-	return *(text + howmuch);
+	return *(text + pos + howmuch);
 }

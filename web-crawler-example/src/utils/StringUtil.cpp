@@ -40,6 +40,7 @@ bool stringUtil::contains(char * subject, char containee) {
 		if (*(subject + pos) == containee) {
 			return true;
 		}
+		pos++;
 	}
 	return false;
 }

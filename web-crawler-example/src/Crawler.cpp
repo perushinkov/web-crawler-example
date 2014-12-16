@@ -11,8 +11,10 @@ Crawler::Crawler() {
 }
 void Crawler::crawl(char * startingAddress) {
 	client->init(startingAddress);
+	gethostbyname();
 	client->request("/iisstart.htm", "127.0.0.1");
 	char * page = client->getPage();
+	htmlParser->parse(page);
 }
 	/*
 
@@ -33,4 +35,5 @@ FAIL:
 void main() {
 	Crawler myCrawler;
 	myCrawler.crawl("127.0.0.1");
+	
 }
