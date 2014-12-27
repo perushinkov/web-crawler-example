@@ -1,5 +1,8 @@
 #include "Crawler.h"
-
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#include <stdio.h>
+#include <windows.h>
 #include <iostream>
 using namespace std;
 
@@ -9,12 +12,12 @@ Crawler::Crawler() {
 	htmlParser = new HtmlParser();
 	invertedIndex = new InvertedIndex();
 }
-void Crawler::crawl(char * startingAddress) {
-	client->init(startingAddress);
-	gethostbyname();
-	client->request("/iisstart.htm", "127.0.0.1");
+void Crawler::crawl(char * domainName) {
+	client->init(domainName);
+	client->request("/iisstart.htm", client->getIp());
 	char * page = client->getPage();
 	htmlParser->parse(page);
+	cout<<"TheEnd!";
 }
 	/*
 
@@ -32,8 +35,8 @@ void Crawler::crawl(char * startingAddress) {
 FAIL:
 	printf("FAIL");*/
 
+
 void main() {
 	Crawler myCrawler;
-	myCrawler.crawl("127.0.0.1");
-	
+	myCrawler.crawl("localhost");
 }

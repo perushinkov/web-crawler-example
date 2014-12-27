@@ -5,6 +5,7 @@ class Lexer{
 private:
 	char * text;
 	int pos;
+	char * rem;
 	
 	
 public:

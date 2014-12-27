@@ -17,14 +17,22 @@ private:
 
 	ResponseParser * parser;
 public:
+
 	HttpClient();
-	void init(char * serverIp);
+	void init(char * domainName);
 	int request(char * requestUri, char * host);
 
 	//symbol by symbol request will be parsed. Reading lots of it and caching will be done later.
 	char * getPage();
+	char * getIp();
 	//Utility methods
 	int error() {return errorCode;}
+
+	// Static util functions
+	static u_long getIpByHost(char *host_name);
+	static bool WinsockInitialized();
 };
 
 #endif
+
+

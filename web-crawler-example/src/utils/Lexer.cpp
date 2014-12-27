@@ -32,7 +32,7 @@ char * Lexer::getLine() {
  */
 char Lexer::nextChar() {
 	pos++;
-	char * rem = text + pos;
+	this->rem = text + pos;
 	return text[pos];
 }
 
@@ -121,12 +121,13 @@ char * Lexer::matchWord() {
 	int startPos = pos;
 	char current = text[pos];
 	while((current >= 'A' && current <= 'Z')
-		  || (current >= 'a' && current <= 'a')) {
+		  || (current >= 'a' && current <= 'z')) {
 		current = this->nextChar();
 	}
-	if (current == 0) {
+	if (current == 0 || startPos == pos) {
 		throw new MatchException;
 	}
+
 
 	char * word = stringUtil::substring(text + startPos, pos - startPos);
 	stringUtil::toLower(word);

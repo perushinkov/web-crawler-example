@@ -1,7 +1,8 @@
 #include "HtmlParser.h"
 #include "../utils/StringUtil.h"
 #include "../utils/MatchException.h"
-
+#include <iostream>
+using namespace std;
 HtmlParser::HtmlParser() {
 	this->lexer = nullptr;
 	this->index = nullptr;
@@ -42,7 +43,7 @@ void HtmlParser::beginTag() {
 void HtmlParser::CharData() {
 	while (follows(rules::CHARDATA)) {
 		if (follows(rules::WORD)) {
-			lexer->matchWord();
+			cout<<lexer->matchWord()<<endl;
 		} else {
 			lexer->nextChar();
 		}

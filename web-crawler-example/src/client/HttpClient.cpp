@@ -1,6 +1,8 @@
 #include "HttpClient.h"
+#include <ws2tcpip.h>
+#include "../utils/StringUtil.h"
 
-#define RESPONSE_MAX_LENGTH 20000
+#define RESPONSE_MAX_LENGTH 30000
 
 HttpClient::HttpClient(){
 	this->serverIp = "127.0.0.1";
@@ -8,21 +10,23 @@ HttpClient::HttpClient(){
 	this->parser = new ResponseParser();
 }
 
-void HttpClient::init(char * serverIp){
-	this->serverIp = serverIp;
-	
+void HttpClient::init(char * domainName){
 	errorCode = 0;
 	unsigned short wVersionRequested;
 	WSADATA wsaData;
 	int err;
 	
 	// PART ONE: Initiating use of Winsock DLL
-	wVersionRequested = MAKEWORD(2, 3);
-	err = WSAStartup(wVersionRequested, &wsaData);
+	// Winsock may have already been initialized, if
+	// a call to getIpByHost has already been made.
+	if (!WinsockInitialized()) {
+		wVersionRequested = MAKEWORD(2, 3);
+		err = WSAStartup(wVersionRequested, &wsaData);
 
-	if (err != 0 || (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) ) {
-		errorCode = 1;
-		return;
+		if (err != 0 || (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) ) {
+			errorCode = 1;
+			exit(errorCode);
+		}
 	}
 
 	int* p_int;
@@ -37,19 +41,21 @@ void HttpClient::init(char * serverIp){
 
 	if (opt1 == -1 || opt2 == -1) {
 		errorCode = 2;
-		return;
+		exit(errorCode);
 	}
-
+		
 	struct sockaddr_in my_addr;
 	my_addr.sin_family = AF_INET;
 	my_addr.sin_port = htons(serverPort);
 
 	memset(&(my_addr.sin_zero), 0, 8);
-	my_addr.sin_addr.s_addr = inet_addr(serverIp);
+	my_addr.sin_addr.s_addr = getIpByHost(domainName);
+
+	this->serverIp = inet_ntoa(my_addr.sin_addr);
 
 	if (connect(sock, (sockaddr *)&my_addr, sizeof(my_addr))) {
-		errorCode = 3;
-		return;
+		errorCode = 4;
+		exit(errorCode);
 	}
 }
 
@@ -98,6 +104,9 @@ char * HttpClient::getResponse() {
 	return returnText;
 }
 
+char * HttpClient::getIp() {
+	return this->serverIp;
+}
 /**
  * Fetches Html page
  */
@@ -105,4 +114,64 @@ char * HttpClient::getPage() {
 	char * response = getResponse();
 	parser->parse(response);
 	return parser->getPageContent();
+}
+
+
+// STATIC FUNCTIONS START HERE:
+
+/**
+ * Returns ip as a u_long that can be directly assigned to s_addr.
+ */
+u_long HttpClient::getIpByHost(char *host_name) {
+
+    //-----------------------------------------
+    // Declare and initialize variables
+    WSADATA wsaData;
+    int iResult;
+
+    DWORD dwError;
+    int i = 0;
+    struct hostent *remoteHost;
+    struct in_addr addr;
+
+    // Initialize Winsock
+	if (!WinsockInitialized()) {
+		iResult = WSAStartup(MAKEWORD(2, 2), &wsaData);
+		if (iResult != 0) {
+			printf("WSAStartup failed: %d\n", iResult);
+			return 0;
+		}
+	}
+
+    remoteHost = gethostbyname(host_name);
+    if (remoteHost == nullptr) {
+        return 0;
+    }
+	
+    i = 0;
+    if (remoteHost->h_addrtype == AF_INET)
+    {
+        if (remoteHost->h_addr_list[i] != 0) {
+			return *((u_long *) remoteHost->h_addr_list[0]); 
+        }
+    }
+    else {   
+		printf("Different from AF_INET!\n");
+        return 0;
+    } 
+	printf("Undiagnosed mistake! DEBUG please!\n");
+    return 0;
+}
+
+/**
+ * This function tests if winsock dll has been initialized.
+ * It does that by attempting to create a socket, and checking
+ * the error message.
+ */
+bool HttpClient::WinsockInitialized() {
+    SOCKET s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (s == INVALID_SOCKET && WSAGetLastError() == WSANOTINITIALISED){
+        return false;
+    }
+    return true;
 }
