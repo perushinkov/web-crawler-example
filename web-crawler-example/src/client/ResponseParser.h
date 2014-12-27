@@ -16,7 +16,7 @@ public:
 	void parse(char * t);
 
 	char * getPageContent() {
-		return pageContent;
+		return pageContent_;
 	}
 };
 

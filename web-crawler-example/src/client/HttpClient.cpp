@@ -78,7 +78,7 @@ int HttpClient::request(char * requestUri, char * host) {
 	stringUtil::concat(query, " HTTP/1.1\nhost:");
 	stringUtil::concat(query, host);
 	stringUtil::concat(query, "\n\n");
-	return send(sock, query, strlen(query), 0);
+	return send(sock_, query, strlen(query), 0);
 }
 /**
  * Fetches HTTP response.
@@ -90,7 +90,7 @@ char * HttpClient::getResponse() {
 
 	// Assuming the response does not exceed the set maximum length,
 	// we get the response text into the char*text holder
-	int received = recv(sock, text, RESPONSE_MAX_LENGTH, 0);
+	int received = recv(sock_, text, RESPONSE_MAX_LENGTH, 0);
 	
 	// Once we know the length of the received text, we allocate
 	// a holder just big enough to contain it

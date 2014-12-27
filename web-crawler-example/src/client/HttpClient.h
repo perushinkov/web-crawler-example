@@ -28,7 +28,7 @@ public:
 	char * getPage();
 	char * getIp();
 	//Utility methods
-	int error() {return errorCode;}
+	int error() {return errorCode_;}
 
 	// Static util functions
 	static u_long getIpByHost(char *host_name);

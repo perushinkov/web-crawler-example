@@ -36,9 +36,14 @@ HtmlParser::HtmlParser() {
 
 void HtmlParser::parse(char * t) {
 	if (index_ != nullptr) {
-		free(index_);
+		delete index_;
 	}
 	index_ = new BinNode<StraightIndexValue>(nullptr, nullptr);
+
+	if (links_ != nullptr) {
+		delete links_;
+	}
+	links_ = new BinNode<StraightIndexValue>(nullptr, nullptr);
 	
 	lexer_ = new Lexer(t);
 	document();
