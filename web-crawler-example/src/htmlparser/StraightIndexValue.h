@@ -6,8 +6,8 @@
 
 class StraightIndexValue {
 private:
-	char * word;
-	int occurences;
+	char * word_;
+	int occurences_;
 public:
 	StraightIndexValue(char * word);
 

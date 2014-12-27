@@ -31,6 +31,23 @@ int stringUtil::compare(char * a, char * b) {
 	}
 }
 
+char * stringUtil::concat(char * a, char * b) {
+	char * c;
+	int len_a, len_b, len_c;
+
+	len_a = length(a);
+	len_b = length(b);
+	len_c = len_a + len_b;
+
+	c = (char *) malloc(len_c + 1);
+	c[len_c] = '\0';
+
+	copy(a, c, len_a);
+	copy(b, c + len_a, len_b);
+
+	return c;
+}
+
 bool stringUtil::contains(char * subject, char containee) {
 	int pos = 0;
 	while (true) {

@@ -5,13 +5,13 @@
 #define RESPONSE_MAX_LENGTH 30000
 
 HttpClient::HttpClient(){
-	this->serverIp = "127.0.0.1";
-	this->serverPort = 80;
-	this->parser = new ResponseParser();
+	serverIp_ = "127.0.0.1";
+	serverPort_ = 80;
+	parser_ = new ResponseParser();
 }
 
 void HttpClient::init(char * domainName){
-	errorCode = 0;
+	errorCode_ = 0;
 	unsigned short wVersionRequested;
 	WSADATA wsaData;
 	int err;
@@ -24,38 +24,38 @@ void HttpClient::init(char * domainName){
 		err = WSAStartup(wVersionRequested, &wsaData);
 
 		if (err != 0 || (LOBYTE(wsaData.wVersion) != 2 || HIBYTE(wsaData.wVersion) != 2) ) {
-			errorCode = 1;
-			exit(errorCode);
+			errorCode_ = 1;
+			exit(errorCode_);
 		}
 	}
 
 	int* p_int;
 
-	sock = socket(AF_INET, SOCK_STREAM, 0);
+	sock_ = socket(AF_INET, SOCK_STREAM, 0);
 	p_int = (int *)malloc(sizeof(int));
 	*p_int = 1;
 
 	//Setting some standard options, recommended by our lecturer
-	int opt1 = setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char *)p_int, sizeof(int));
-	int opt2 = setsockopt(sock, SOL_SOCKET, SO_KEEPALIVE, (char *)p_int, sizeof(int));
+	int opt1 = setsockopt(sock_, SOL_SOCKET, SO_REUSEADDR, (char *)p_int, sizeof(int));
+	int opt2 = setsockopt(sock_, SOL_SOCKET, SO_KEEPALIVE, (char *)p_int, sizeof(int));
 
 	if (opt1 == -1 || opt2 == -1) {
-		errorCode = 2;
-		exit(errorCode);
+		errorCode_ = 2;
+		exit(errorCode_);
 	}
 		
 	struct sockaddr_in my_addr;
 	my_addr.sin_family = AF_INET;
-	my_addr.sin_port = htons(serverPort);
+	my_addr.sin_port = htons(serverPort_);
 
 	memset(&(my_addr.sin_zero), 0, 8);
 	my_addr.sin_addr.s_addr = getIpByHost(domainName);
 
-	this->serverIp = inet_ntoa(my_addr.sin_addr);
+	serverIp_ = inet_ntoa(my_addr.sin_addr);
 
-	if (connect(sock, (sockaddr *)&my_addr, sizeof(my_addr))) {
-		errorCode = 4;
-		exit(errorCode);
+	if (connect(sock_, (sockaddr *)&my_addr, sizeof(my_addr))) {
+		errorCode_ = 4;
+		exit(errorCode_);
 	}
 }
 
@@ -73,11 +73,11 @@ void HttpClient::init(char * domainName){
 int HttpClient::request(char * requestUri, char * host) {
 	char * query = (char *)malloc(100);
 	query[0] = '\0';
-	strcat(query, "GET ");
-	strcat(query, requestUri);
-	strcat(query, " HTTP/1.1\nhost:");
-	strcat(query, host);
-	strcat(query, "\n\n");
+	stringUtil::concat(query, "GET");
+	stringUtil::concat(query, requestUri);
+	stringUtil::concat(query, " HTTP/1.1\nhost:");
+	stringUtil::concat(query, host);
+	stringUtil::concat(query, "\n\n");
 	return send(sock, query, strlen(query), 0);
 }
 /**
@@ -97,7 +97,7 @@ char * HttpClient::getResponse() {
 	char * returnText = (char *)malloc(received+1);
 	// and copy the response text into it
 	*(text + received*sizeof(char)) = '\0';
-	strcpy(returnText, text);
+	stringUtil::copy(returnText, text, received);
 	
 	//Then we free the originally allocated memory, which we no longer need.
 	free(text);
@@ -105,15 +105,15 @@ char * HttpClient::getResponse() {
 }
 
 char * HttpClient::getIp() {
-	return this->serverIp;
+	return serverIp_;
 }
 /**
  * Fetches Html page
  */
 char * HttpClient::getPage() {
 	char * response = getResponse();
-	parser->parse(response);
-	return parser->getPageContent();
+	parser_->parse(response);
+	return parser_->getPageContent();
 }
 
 
@@ -129,10 +129,8 @@ u_long HttpClient::getIpByHost(char *host_name) {
     WSADATA wsaData;
     int iResult;
 
-    DWORD dwError;
     int i = 0;
     struct hostent *remoteHost;
-    struct in_addr addr;
 
     // Initialize Winsock
 	if (!WinsockInitialized()) {

@@ -10,10 +10,10 @@
  */
 class Crawler {
 private:
-	HttpClient * client;
-	SiteMap * siteMap;
-	HtmlParser * htmlParser;
-	InvertedIndex * invertedIndex;
+	HttpClient * client_;
+	SiteMap * siteMap_;
+	HtmlParser * htmlParser_;
+	InvertedIndex * invertedIndex_;
 public:
 	Crawler();
 	void crawl(char * startingAddress);

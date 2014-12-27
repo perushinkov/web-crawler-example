@@ -9,8 +9,8 @@
 
 class Posting {
 private:
-	int docId;
-	int occurences;
+	int docId_;
+	int occurences_;
 public:
 	Posting(int docId);
 	void increment();

@@ -1,19 +1,19 @@
 #include "Posting.h"
 
 Posting::Posting(int docId) {
-	this->docId = docId;
-	this->occurences = 0;
+	docId_ = docId;
+	occurences_ = 0;
 }
 
 void Posting::increment() {
-	this->occurences++;
+	occurences_++;
 }
 
 int Posting::hasKey(void * ptr) {
-	if (docId == *((int*)ptr)) {
+	if (docId_ == *((int*)ptr)) {
 		return 0;
 	}
-	if (docId > *((int*)ptr)) {
+	if (docId_ > *((int*)ptr)) {
 		return 1;
 	}
 	return -1;
@@ -26,14 +26,14 @@ int Posting::equals(void * object) {
 
 	int objectDocId = ((Posting*)object)->getDocId();
 	void * p_int = &objectDocId; 
-	return this->hasKey(p_int);
+	return hasKey(p_int);
 }
 
 
 int Posting::getDocId() {
-	return docId;
+	return docId_;
 }
 
 int Posting::getOccurences() {
-	return occurences;
+	return occurences_;
 }

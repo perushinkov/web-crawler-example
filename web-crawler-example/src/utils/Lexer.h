@@ -3,9 +3,9 @@
 
 class Lexer{
 private:
-	char * text;
-	int pos;
-	char * rem;
+	char * text_;
+	int pos_;
+	char * rem_;
 	
 	
 public:
@@ -16,7 +16,7 @@ public:
 	char * getLine();
 	
 	void match(char * txt);
-	void matchUntil(char * txt);
+	int matchUntil(char * txt);
 
 	bool isNext(char * txt);
 	void matchSpace();
@@ -26,6 +26,7 @@ public:
 	long matchNumber();
 	char * matchWord();
 	char lookahead(int howmuch);
+	char * fetchLastNChars(int n);
 };
 
 #endif

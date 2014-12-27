@@ -7,16 +7,16 @@
 using namespace std;
 
 Crawler::Crawler() {
-	client = new HttpClient();
-	siteMap = new SiteMap();
-	htmlParser = new HtmlParser();
-	invertedIndex = new InvertedIndex();
+	client_ = new HttpClient();
+	siteMap_ = new SiteMap();
+	htmlParser_ = new HtmlParser();
+	invertedIndex_ = new InvertedIndex();
 }
 void Crawler::crawl(char * domainName) {
-	client->init(domainName);
-	client->request("/iisstart.htm", client->getIp());
-	char * page = client->getPage();
-	htmlParser->parse(page);
+	client_->init(domainName);
+	client_->request("/iisstart.htm", client_->getIp());
+	char * page = client_->getPage();
+	htmlParser_->parse(page);
 	cout<<"TheEnd!";
 }
 	/*

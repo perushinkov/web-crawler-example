@@ -10,17 +10,22 @@
  */
 class HtmlParser {
 private:
-	enum rules {ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
+	enum rules_ {ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
 		DIGIT, DOCTYPEDECL, DOCUMENT, EQ, FINISHTAG, ELEMENT, EMPTYTAGFINISH, ETAG, 
 		LETTER, MISC, NAME, NAMECHAR, PI_enum, REFERENCE, S_enum, SYSTEMLITERAL, WORD};
 
-	BinNode<StraightIndexValue> * index;
-	Lexer * lexer;
+	BinNode<StraightIndexValue> * index_;
+	BinNode<StraightIndexValue> * links_;
+	Lexer * lexer_;
+
+	bool isLink_;
+	char * link_;
+
+	void updateIndex(BinNode<StraightIndexValue> * anyIndex, char * word);
+	bool follows(rules_ rule);
 public:
 	HtmlParser();
 	void parse(char * page);
-	
-	bool follows(rules rule);
 
 	//Attribute ::= Name Eq SystemLiteral
 	void Attribute();
@@ -57,7 +62,7 @@ public:
 	//Misc ::= Comment | PI |  S
 	void Misc();
 	//Name ::= (Letter | '_' | ':') (NameChar)*
-	void Name();
+	char * Name();
 	//NameChar ::= Letter | Digit | '.' | '-' | '_' | ':';
 	//		lexer->nextChar();
 	//PI ::= '<?' <^[?]> '?>'
@@ -67,7 +72,7 @@ public:
 	//S ::= (<space>(32) | <tab>(9) | <CR>(13) | <LF>(10))+
 	//		lexer->nextChar();
 	//SystemLiteral	::=	('"' [^"]* '"') | ("'" [^']* "'")
-	void SystemLiteral();
+	char * SystemLiteral();
 };
 
 #endif

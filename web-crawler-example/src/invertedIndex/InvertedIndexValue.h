@@ -11,8 +11,8 @@
 
 class InvertedIndexValue {
 private:
-	char * word;
-	BinNode<Posting> * posts;
+	char * word_;
+	BinNode<Posting> * posts_;
 public:
 	InvertedIndexValue(char * word);
 	void addOccurence(int docId);

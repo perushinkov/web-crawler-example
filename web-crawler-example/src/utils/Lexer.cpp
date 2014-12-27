@@ -9,21 +9,21 @@ using namespace std;
 #include "StringUtil.h"
 
 Lexer::Lexer(char * text) {
-	this->text = text;
-	pos = 0;
+	text_ = text;
+	pos_ = 0;
 }
 
 char * Lexer::getLine() {
-	int startPosition = this->pos;
-	char current = text[pos];
+	int startPosition = pos_;
+	char current = text_[pos_];
 	while(current != '\n' && current != '\0') {
-		current = this->nextChar();
+		current = nextChar();
 	} 
-	char * line = (char *)malloc(pos - startPosition + 1);
-	line[pos - startPosition] = '\0';
-	stringUtil::copy(text + startPosition, line, pos - startPosition);
+	char * line = (char *)malloc(pos_ - startPosition + 1);
+	line[pos_ - startPosition] = '\0';
+	stringUtil::copy(text_ + startPosition, line, pos_ - startPosition);
 
-	current = this->nextChar();
+	current = nextChar();
 	return line;
 }
 /**
@@ -31,16 +31,16 @@ char * Lexer::getLine() {
  * Caller is responsible for not calling nextChar() when there is no next char.
  */
 char Lexer::nextChar() {
-	pos++;
-	this->rem = text + pos;
-	return text[pos];
+	pos_++;
+	rem_ = text_ + pos_;
+	return text_[pos_];
 }
 
 char * Lexer::getRemainingText() {
-	int charsRemaining = strlen(text + pos);
+	int charsRemaining = strlen(text_ + pos_);
 	char * remainder = (char *)malloc(charsRemaining + 1);
 	remainder[charsRemaining] = '\0';
-	stringUtil::copy(text+pos,remainder,charsRemaining);
+	stringUtil::copy(text_ + pos_, remainder, charsRemaining);
 	return remainder;
 }
 
@@ -65,8 +65,8 @@ void Lexer::matchHttpVersion() {
 void Lexer::match(char * txt) {
 	int len = strlen(txt);
 
-	char * remaining = text + pos;
-	char current = text[pos];
+	char * remaining = text_ + pos_;
+	char current = text_[pos_];
 	for (int i = 0; i < len; i++) {
 		if (current != txt[i]) {
 			throw new MatchException;
@@ -76,20 +76,23 @@ void Lexer::match(char * txt) {
 }
 /**
  * Matches text until it meets a certain expression txt. 
- * Does not match this expression.
+ * Does not match the txt expression.
+ * Returns number of matched characters.
  * 
  * Example:
  * TextRemaining: "we are! They are, you are!"
  *	matchUntil("are,");
  * TextRemaining after call: "are, you are!"
  */
-void Lexer::matchUntil(char * txt) {
-	pos += stringUtil::findAinB(txt, text + pos);
+int Lexer::matchUntil(char * txt) {
+	int displacement = stringUtil::findAinB(txt, text_ + pos_);
+	pos_ += displacement;
+	return displacement;
 }
 
 
 bool Lexer::isNext(char * txt) {
-	int relPos = stringUtil::findAinB(txt, text + pos);
+	int relPos = stringUtil::findAinB(txt, text_ + pos_);
 	if (relPos == 0) {
 		return true;
 	}
@@ -102,11 +105,11 @@ bool Lexer::isNext(char * txt) {
  */
 long Lexer::matchNumber() {
 	long num = 0;
-	char current = text[pos];
+	char current = text_[pos_];
 	while(current >= '0' && current <= '9') {
 		num *= 10;
 		num += current - '0';
-		current = this->nextChar();
+		current = nextChar();
 	}
 	if (current == 0) {
 		throw new MatchException;
@@ -118,21 +121,28 @@ long Lexer::matchNumber() {
  * Words are reduced to lowerCase.
  */
 char * Lexer::matchWord() {
-	int startPos = pos;
-	char current = text[pos];
+	int startPos = pos_;
+	char current = text_[pos_];
 	while((current >= 'A' && current <= 'Z')
 		  || (current >= 'a' && current <= 'z')) {
-		current = this->nextChar();
+		current = nextChar();
 	}
-	if (current == 0 || startPos == pos) {
+	if (current == 0 || startPos == pos_) {
 		throw new MatchException;
 	}
 
 
-	char * word = stringUtil::substring(text + startPos, pos - startPos);
+	char * word = stringUtil::substring(text_ + startPos, pos_ - startPos);
 	stringUtil::toLower(word);
 	return word;
 }
 char Lexer::lookahead(int howmuch) {
-	return *(text + pos + howmuch);
+	return *(text_ + pos_ + howmuch);
+}
+
+char * Lexer::fetchLastNChars(int n) {
+	char * retVal = (char *)malloc(n + 1);
+	retVal[n] = '\0';
+	stringUtil::copy(text_ + pos_ - n, retVal, n);
+	return retVal;
 }

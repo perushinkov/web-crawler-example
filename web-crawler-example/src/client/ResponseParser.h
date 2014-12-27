@@ -4,9 +4,9 @@
 
 class ResponseParser{
 private:
-	long statusCode;
-	char * pageContent;
-	Lexer* lexer;
+	long statusCode_;
+	char * pageContent_;
+	Lexer* lexer_;
 
 
 	void parseStatusLine();

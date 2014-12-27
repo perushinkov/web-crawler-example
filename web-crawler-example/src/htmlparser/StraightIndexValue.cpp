@@ -1,16 +1,16 @@
 #include "StraightIndexValue.h"
 #include "string.h"
 StraightIndexValue::StraightIndexValue(char * word) {
-	this->word = word;
-	this->occurences = 0;
+	word_ = word;
+	occurences_ = 1;
 }
 
 void StraightIndexValue::increment() {
-	this->occurences++;
+	occurences_++;
 }
 
 int StraightIndexValue::hasKey(void * ptr) {
-	int comparison = strcmp(word, (char*)ptr); 
+	int comparison = strcmp(word_, (char*)ptr); 
 	if (comparison == 0) {
 		return 0;
 	}
@@ -34,9 +34,9 @@ int StraightIndexValue::equals(void * object) {
 
 
 char * StraightIndexValue::getWord() {
-	return word;
+	return word_;
 }
 
 int StraightIndexValue::getOccurences() {
-	return occurences;
+	return occurences_;
 }

@@ -8,14 +8,16 @@ using namespace std;
 
 class HttpClient {
 private:
-	int errorCode; // Negative for errors, 0 for no errors 
-	int sock;
+	int errorCode_; // Negative for errors, 0 for no errors 
+	int sock_;
 
-	long serverPort;
-	char * serverIp;
+	u_short serverPort_;
+	char * serverIp_;
+
+	ResponseParser * parser_;
+
+	//Methods
 	char * getResponse();
-
-	ResponseParser * parser;
 public:
 
 	HttpClient();

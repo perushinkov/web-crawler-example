@@ -4,7 +4,7 @@
 using namespace std;
 
 ResponseParser::ResponseParser() {
-	lexer = nullptr;
+	lexer_ = nullptr;
 }
 /*
 Response =	Status-Line 
@@ -12,15 +12,15 @@ Response =	Status-Line
 			[ message-body ]	
 */
 void ResponseParser::parse(char * t) {
-	if (lexer != nullptr) {
-		delete lexer;
+	if (lexer_ != nullptr) {
+		delete lexer_;
 	}
-	statusCode = 0;
-	lexer = new Lexer(t);
+	statusCode_ = 0;
+	lexer_ = new Lexer(t);
 		
 	parseStatusLine();
 	parseHeaders();
-	this->pageContent = lexer->getRemainingText();
+	pageContent_ = lexer_->getRemainingText();
 }
 
 /*
@@ -30,7 +30,7 @@ void ResponseParser::parseHeaders() {
 	char * line;
 	int lengthOfLine;
 	do {
-		line = lexer->getLine();
+		line = lexer_->getLine();
 		lengthOfLine = strlen(line);
 	} while (lengthOfLine > 1);
 }
@@ -39,13 +39,13 @@ void ResponseParser::parseHeaders() {
 
 //Status-Line = HTTP-Version SP Status-Code SP Reason-Phrase CRLF
 void ResponseParser::parseStatusLine() {
-	lexer->matchHttpVersion();
-	lexer->matchSpace();
-	statusCode = lexer->matchNumber();
+	lexer_->matchHttpVersion();
+	lexer_->matchSpace();
+	statusCode_ = lexer_->matchNumber();
 
-	if (statusCode/100 != 2) {
+	if (statusCode_/100 != 2) {
 		throw new exception;
 	}
 	//We don't need the rest of the line
-	lexer->getLine();
+	lexer_->getLine();
 }
