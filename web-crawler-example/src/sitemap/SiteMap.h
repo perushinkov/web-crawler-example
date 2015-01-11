@@ -7,10 +7,12 @@ using namespace std;
  */
 class SiteMap {
 private:
-	vector<string> links;
+	vector<string> links_;
 public:
 	SiteMap(char * startingAddress);
-	char* getNextUrl(); //TODO: Implement
+	char* getNextUrl(); 
+	bool hasNextUrl(); 
+	void updateMap(BinNode<StraightIndexValue> * links_); // TODO
 };
 
 #endif

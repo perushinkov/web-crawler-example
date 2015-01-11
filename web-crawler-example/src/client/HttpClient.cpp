@@ -114,6 +114,7 @@ char * HttpClient::getIp() {
  */
 char * HttpClient::getPage() {
 	char * response = getResponse();
+	//printf(response);
 	parser_->parse(response);
 	return parser_->getPageContent();
 }
@@ -144,6 +145,7 @@ u_long HttpClient::getIpByHost(char *host_name) {
 	}
 
     remoteHost = gethostbyname(host_name);
+	int john = WSAGetLastError();
     if (remoteHost == nullptr) {
         return 0;
     }

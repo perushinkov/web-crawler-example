@@ -13,13 +13,16 @@ Crawler::Crawler(char * startingAddress) {
 	invertedIndex_ = new InvertedIndex();
 }
 void Crawler::crawl() {
-	
-	char * url = siteMap_->getNextUrl();
-	client_->init(HttpClient::getHostFromUrl(url));
-	client_->request(HttpClient::getUriFromUrl(url), client_->getIp());
-	char * page = client_->getPage();
-	htmlParser_->parse(page);
-	cout<<"TheEnd!";
+	while (siteMap_->hasNextUrl()) {
+		char * url = siteMap_->getNextUrl();
+		client_->init(HttpClient::getHostFromUrl(url));
+		client_->request(HttpClient::getUriFromUrl(url), client_->getIp());
+		char * page = client_->getPage();
+		htmlParser_->parse(page, url);
+		siteMap_->updateMap(htmlParser_->getLinks());
+		invertedIndex_->updateIndex(htmlParser_->getWords());
+		cout << "TheEnd!";
+	}
 }
 	/*
 
@@ -39,6 +42,6 @@ FAIL:
 
 
 void main() {
-	Crawler myCrawler("localhost/iisstart.htm");
+	Crawler myCrawler("crawlertest.cs.tu-varna.bg");
 	myCrawler.crawl();
 }

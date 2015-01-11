@@ -19,11 +19,13 @@ private:
 	Lexer * lexer_;
 
 	bool isLink_;
-	char * link_;
+	char* link_;
+	char* urlBase_;
 
 	void updateIndex(BinNode<StraightIndexValue> * anyIndex, char * word);
 	bool follows(rules_ rule);
-	char* processLink(char * link);
+	char* processLink(char* link);
+	char* getBaseFromUrl(char* url);
 public:
 	HtmlParser();
 
@@ -31,8 +33,7 @@ public:
 	BinNode<StraightIndexValue> * getWords();
 	BinNode<StraightIndexValue> * getLinks();
 
-
-	void parse(char * page);
+	void parse(char * page, char * url);
 
 	//Attribute ::= Name Eq SystemLiteral
 	void Attribute();
@@ -45,7 +46,7 @@ public:
 	//Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
 	void Comment();
 	//compoundTagFinish ::= '>' content ETag
-	void compoundTagFinish();
+	char* compoundTagFinish();
 	//content ::= (element | CharData | Reference | PI | Comment)*
 	void content();
 	//Digit ::= '0'..'9'
@@ -57,13 +58,13 @@ public:
 	//Eq ::= S? '=' S?
 	void Eq();
 	//finishTag ::= emptyTagFinish | compoundTagFinish
-	void finishTag();
+	char* finishTag();
 	//element ::= beginTag S? finishTag
-	void element();
+	char* element();
 	//emptyTagFinish ::= '/>'
 	void emptyTagFinish();
 	//ETag ::= '</' Name S? '>'
-	void ETag();
+	char* ETag();
 	//Letter ::= [A-Za-z]
 	void Letter();
 	//Misc ::= Comment | PI |  S

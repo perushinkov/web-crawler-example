@@ -30,14 +30,39 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 /*
 	For now supports just absolute urls
 */
-char* processLink(char * link) {
+char* HtmlParser::processLink(char* link) {
+	//REMOVE VARIABLES
+	link = stringUtil::substring(link, stringUtil::findAinB(link, "?"));
+
 	// IF ABSOLUTE URL
 	if (stringUtil::findAinB("http://www", link) == 0) {
 		return link + 7;
 	}
-	// IF PATH TO A FILE
-	/*if (stringUtil::findAinB(":") == -1)
-	return link;*/
+	int len = stringUtil::length(link);
+
+	// IF RELATIVE PATH TO A FILE
+	if ( (stringUtil::findAinB(link, ".htm") == len - 4 || 
+		stringUtil::findAinB(link, ".html") == len - 5) &&
+		stringUtil::findAinB(link, "http://www") == -1) {
+		return stringUtil::concat(urlBase_, link);
+	}
+	// No other hrefs supported!
+	return nullptr;
+}
+
+char* HtmlParser::getBaseFromUrl(char* url) {
+	if (stringUtil::findAinB("/", url) == -1) {
+		return stringUtil::concat(url, "/");
+	}
+	else {
+		for (int i = stringUtil::length(url) - 1; i > 0; i--) {
+			if (*(url + i) == '/') {
+				return stringUtil::substring(url, i + 1);
+			}
+		}
+	}
+	throw new exception("Base url not formed correctly!");
+	return nullptr;
 }
 
 //PUBLIC
@@ -56,7 +81,8 @@ BinNode<StraightIndexValue> * HtmlParser::getLinks() {
 	return links_;
 }
 
-void HtmlParser::parse(char * t) {
+void HtmlParser::parse(char* t, char* url) {
+	urlBase_ = getBaseFromUrl(url);
 	if (index_ != nullptr) {
 		delete index_;
 	}
@@ -106,7 +132,10 @@ void HtmlParser::beginTag() {
 		}
 	}
 	if (link_ != nullptr) {
-		updateIndex(links_, processLink(link_));
+		char* mylink = processLink(link_);
+		if (mylink != nullptr) {
+			updateIndex(links_, mylink);
+		}	
 	}
 }
 //Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
@@ -131,16 +160,19 @@ void HtmlParser::Comment() {
 	lexer_->match("-->");
 }
 //compoundTagFinish ::= '>' content ETag
-void HtmlParser::compoundTagFinish() {
+char* HtmlParser::compoundTagFinish() {
 	lexer_->match(">");
 	content();
-	ETag();
+	return ETag();
 }
 //content ::= (element | CharData | Reference | PI | Comment)*
 void HtmlParser::content() {
 	while(true) {
 		if (follows(ELEMENT)) {
-			element();
+			char* endOfDoc = element();
+			if (endOfDoc != nullptr && stringUtil::compare(endOfDoc, "html")) { // HTML fix
+				break;
+			}
 		} else if (follows(CHARDATA)) {
 			CharData();
 		} else if (follows(REFERENCE)) {
@@ -157,11 +189,12 @@ void HtmlParser::content() {
 //doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
 void HtmlParser::doctypedecl() {
 	lexer_->match("<!DOCTYPE");
-	lexer_->matchUntil(">");
+	lexer_->matchUntil(">"); 
 	lexer_->match(">");
 }
 //document ::= Misc* (doctypedecl Misc*)? element Misc* 
 void HtmlParser::document() {
+	lexer_->matchUntil("<"); // HTML fix
 	while (follows(MISC)) {
 		Misc();
 	}
@@ -189,32 +222,35 @@ void HtmlParser::Eq() {
 	}
 }
 //finishTag ::= emptyTagFinish | compoundTagFinish
-void HtmlParser::finishTag() {
+char* HtmlParser::finishTag() {
 	if (follows(EMPTYTAGFINISH)) {
 		emptyTagFinish();
 	} else if(follows(COMPOUNDTAGFINISH)) {
-		compoundTagFinish();
+		return compoundTagFinish();
 	} else {
 		throw new MatchException();
 	}
+	return nullptr;
 }
 //element ::= beginTag finishTag
-void HtmlParser::element() {
+char* HtmlParser::element() {
 	beginTag();
-	finishTag();
+	return finishTag();
 }
 //emptyTagFinish ::= '/>'
 void HtmlParser::emptyTagFinish() {
 	lexer_->match("/>");
 }
 //ETag ::= '</' Name S? '>'
-void HtmlParser::ETag() {
+char* HtmlParser::ETag() {
+	if (!lexer_->isNext("</")) return nullptr; //HTML fix
 	lexer_->match("</");
-	Name();
+	char* retValue = Name();
 	if (follows(S_enum)) {
 		lexer_->nextChar();
 	}
 	lexer_->match(">");
+	return retValue;
 }
 //Letter ::= [A-Za-z]
 //lexer->nextChar();

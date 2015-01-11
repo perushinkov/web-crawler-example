@@ -36,7 +36,7 @@ int stringUtil::compare(char * a, char * b) {
 	}
 }
 
-char * stringUtil::concat(char * a, char * b) {
+char * stringUtil::concat(const char * a, const char * b) {
 	char * c;
 	int len_a, len_b, len_c;
 
@@ -67,7 +67,7 @@ bool stringUtil::contains(char * subject, char containee) {
 	return false;
 }
 
-void stringUtil::copy(char * from, char * to, int numberOfChars) {
+void stringUtil::copy(const char * from, char * to, int numberOfChars) {
 	for (int i = 0; i < numberOfChars; i++) {
 		to[i] = from[i];
 	}
@@ -95,7 +95,7 @@ int stringUtil::findAinB(char * a, char * b) {
 	return -1;
 }
 
-int stringUtil::length(char * a) {
+int stringUtil::length(const char * a) {
 	int pos = 0;
 	while (1) {
 		if (a[pos] == '\0') break;
