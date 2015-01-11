@@ -175,3 +175,24 @@ bool HttpClient::WinsockInitialized() {
     }
     return true;
 }
+
+/**
+ * Url must be in the form hostname[/[path]]
+ *
+ *
+ */
+char* HttpClient::getHostFromUrl(char* url) {
+	int pos = stringUtil::findAinB("/", url);
+	if (pos == -1) {
+		return url;
+	}
+	return stringUtil::substring(url, pos);
+} 
+char* HttpClient::getUriFromUrl(char* url) {
+	int pos = stringUtil::findAinB("/", url);
+	if (pos == -1) {
+		return "/";
+	}
+	int len = stringUtil::length(url);
+	return stringUtil::substring(url + pos, len - pos);
+} 

@@ -1,6 +1,10 @@
 #include "StringUtil.h"
 #include "MatchException.h"
-
+/*
+	standard:
+	0 for equality
+	-1 or 1 respectively for other results
+*/
 int stringUtil::compare(char * a, char * b) {
 	int pos = 0;
 	char a_cur, b_cur;

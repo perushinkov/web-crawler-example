@@ -33,6 +33,8 @@ public:
 	// Static util functions
 	static u_long getIpByHost(char *host_name);
 	static bool WinsockInitialized();
+	static char* getHostFromUrl(char* url); 
+	static char* getUriFromUrl(char* url); 
 };
 
 #endif

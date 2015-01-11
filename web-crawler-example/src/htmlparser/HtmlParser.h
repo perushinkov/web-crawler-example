@@ -23,6 +23,7 @@ private:
 
 	void updateIndex(BinNode<StraightIndexValue> * anyIndex, char * word);
 	bool follows(rules_ rule);
+	char* processLink(char * link);
 public:
 	HtmlParser();
 

@@ -1,4 +1,8 @@
 #include "SiteMap.h"
 
-SiteMap::SiteMap() {
+SiteMap::SiteMap(char * startingAddress) {
+}
+
+char* SiteMap::getNextUrl() {
+	return "localhost/iisstart.htm";
 }

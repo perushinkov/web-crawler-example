@@ -27,6 +27,19 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 	}
 }
 
+/*
+	For now supports just absolute urls
+*/
+char* processLink(char * link) {
+	// IF ABSOLUTE URL
+	if (stringUtil::findAinB("http://www", link) == 0) {
+		return link + 7;
+	}
+	// IF PATH TO A FILE
+	/*if (stringUtil::findAinB(":") == -1)
+	return link;*/
+}
+
 //PUBLIC
 
 HtmlParser::HtmlParser() {
@@ -64,7 +77,7 @@ void HtmlParser::parse(char * t) {
 void HtmlParser::Attribute() {
 	bool isHref = false;
 	char * attrName = Name();
-	if (isLink_ && stringUtil::compare(attrName, "href")) {
+	if (isLink_ && !stringUtil::compare(attrName, "href")) {
 		isHref = true;
 	}
 	if (follows(EQ)) {
@@ -93,7 +106,7 @@ void HtmlParser::beginTag() {
 		}
 	}
 	if (link_ != nullptr) {
-		updateIndex(links_, link_);
+		updateIndex(links_, processLink(link_));
 	}
 }
 //Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)

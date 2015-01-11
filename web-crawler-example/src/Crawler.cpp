@@ -13,9 +13,10 @@ Crawler::Crawler(char * startingAddress) {
 	invertedIndex_ = new InvertedIndex();
 }
 void Crawler::crawl() {
+	
 	char * url = siteMap_->getNextUrl();
-	client_->init(HttpClient->getHostFromUrl(url));
-	client_->request(HttpClient->getUriFromUrl(url), client_->getIp());
+	client_->init(HttpClient::getHostFromUrl(url));
+	client_->request(HttpClient::getUriFromUrl(url), client_->getIp());
 	char * page = client_->getPage();
 	htmlParser_->parse(page);
 	cout<<"TheEnd!";
@@ -38,6 +39,6 @@ FAIL:
 
 
 void main() {
-	Crawler myCrawler("localhost\iisstart.htm");
+	Crawler myCrawler("localhost/iisstart.htm");
 	myCrawler.crawl();
 }
