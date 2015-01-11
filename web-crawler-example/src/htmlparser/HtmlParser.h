@@ -25,6 +25,12 @@ private:
 	bool follows(rules_ rule);
 public:
 	HtmlParser();
+
+	//Getters for results
+	BinNode<StraightIndexValue> * getWords();
+	BinNode<StraightIndexValue> * getLinks();
+
+
 	void parse(char * page);
 
 	//Attribute ::= Name Eq SystemLiteral

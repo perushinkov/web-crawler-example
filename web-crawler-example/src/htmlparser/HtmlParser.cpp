@@ -32,6 +32,15 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 HtmlParser::HtmlParser() {
 	lexer_ = nullptr;
 	index_ = nullptr;
+	links_ = nullptr;
+}
+
+BinNode<StraightIndexValue> * HtmlParser::getWords() {
+	return index_;
+}
+
+BinNode<StraightIndexValue> * HtmlParser::getLinks() {
+	return links_;
 }
 
 void HtmlParser::parse(char * t) {

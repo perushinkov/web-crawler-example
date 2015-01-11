@@ -11,6 +11,7 @@ int stringUtil::compare(char * a, char * b) {
 
 		if (a_cur == b_cur) {
 			if (a_cur != '\0') {
+				pos++;
 				continue;
 			}
 			return 0;

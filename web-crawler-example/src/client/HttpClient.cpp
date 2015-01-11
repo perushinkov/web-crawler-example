@@ -2,7 +2,7 @@
 #include <ws2tcpip.h>
 #include "../utils/StringUtil.h"
 
-#define RESPONSE_MAX_LENGTH 30000
+#define RESPONSE_MAX_LENGTH 20000
 
 HttpClient::HttpClient(){
 	serverIp_ = "127.0.0.1";
@@ -73,11 +73,11 @@ void HttpClient::init(char * domainName){
 int HttpClient::request(char * requestUri, char * host) {
 	char * query = (char *)malloc(100);
 	query[0] = '\0';
-	stringUtil::concat(query, "GET");
-	stringUtil::concat(query, requestUri);
-	stringUtil::concat(query, " HTTP/1.1\nhost:");
-	stringUtil::concat(query, host);
-	stringUtil::concat(query, "\n\n");
+	query = stringUtil::concat(query, "GET ");
+	query = stringUtil::concat(query, requestUri);
+	query = stringUtil::concat(query, " HTTP/1.1\nHOST:");
+	query = stringUtil::concat(query, host);
+	query = stringUtil::concat(query, "\n\n");
 	return send(sock_, query, strlen(query), 0);
 }
 /**
@@ -90,6 +90,7 @@ char * HttpClient::getResponse() {
 
 	// Assuming the response does not exceed the set maximum length,
 	// we get the response text into the char*text holder
+	
 	int received = recv(sock_, text, RESPONSE_MAX_LENGTH, 0);
 	
 	// Once we know the length of the received text, we allocate
@@ -97,10 +98,11 @@ char * HttpClient::getResponse() {
 	char * returnText = (char *)malloc(received+1);
 	// and copy the response text into it
 	*(text + received*sizeof(char)) = '\0';
-	stringUtil::copy(returnText, text, received);
+	stringUtil::copy(text, returnText, received);
 	
 	//Then we free the originally allocated memory, which we no longer need.
 	free(text);
+	//printf("\n\n%s\n\n", returnText);
 	return returnText;
 }
 

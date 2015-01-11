@@ -15,8 +15,8 @@ private:
 	HtmlParser * htmlParser_;
 	InvertedIndex * invertedIndex_;
 public:
-	Crawler();
-	void crawl(char * startingAddress);
+	Crawler(char * startingAddress);
+	void crawl();
 };
 
 #endif

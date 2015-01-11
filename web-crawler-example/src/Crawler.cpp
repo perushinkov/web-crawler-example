@@ -6,15 +6,16 @@
 #include <iostream>
 using namespace std;
 
-Crawler::Crawler() {
+Crawler::Crawler(char * startingAddress) {
 	client_ = new HttpClient();
-	siteMap_ = new SiteMap();
+	siteMap_ = new SiteMap(startingAddress);
 	htmlParser_ = new HtmlParser();
 	invertedIndex_ = new InvertedIndex();
 }
-void Crawler::crawl(char * domainName) {
-	client_->init(domainName);
-	client_->request("/iisstart.htm", client_->getIp());
+void Crawler::crawl() {
+	char * url = siteMap_->getNextUrl();
+	client_->init(HttpClient->getHostFromUrl(url));
+	client_->request(HttpClient->getUriFromUrl(url), client_->getIp());
 	char * page = client_->getPage();
 	htmlParser_->parse(page);
 	cout<<"TheEnd!";
@@ -37,6 +38,6 @@ FAIL:
 
 
 void main() {
-	Crawler myCrawler;
-	myCrawler.crawl("localhost");
+	Crawler myCrawler("localhost\iisstart.htm");
+	myCrawler.crawl();
 }
