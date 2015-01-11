@@ -5,8 +5,8 @@ Posting::Posting(int docId) {
 	occurences_ = 0;
 }
 
-void Posting::increment() {
-	occurences_++;
+void Posting::increment(int howMany) {
+	occurences_ += howMany;
 }
 
 int Posting::hasKey(void * ptr) {

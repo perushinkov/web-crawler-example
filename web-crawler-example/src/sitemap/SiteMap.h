@@ -1,18 +1,29 @@
 #ifndef __SITEMAP_H
 #define __SITEMAP_H 1
+#include "../utils/BinNode.h"
+#include "../htmlparser/StraightIndexValue.h"
 #include <vector>
+#include <map>
 using namespace std;
 /*
  * TODO: Finish this
  */
 class SiteMap {
 private:
-	vector<string> links_;
+	int current_;
+	vector<string> linksToBeCrawled_;
+	
+	map<string, int> urlIds_;
+	map<int, string> idUrls_;
+
+	map<int, vector<int>> urlGraph_;
 public:
 	SiteMap(char * startingAddress);
 	char* getNextUrl(); 
-	bool hasNextUrl(); 
-	void updateMap(BinNode<StraightIndexValue> * links_); // TODO
+	bool hasNextUrl();
+	int getDocId(char * url);
+	void updateMap(BinNode<StraightIndexValue> * links_, char* parentUrl); // TODO
+	void printPrettyPicture();
 };
 
 #endif

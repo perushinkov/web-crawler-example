@@ -10,7 +10,7 @@
  */
 class HtmlParser {
 private:
-	enum rules_ {ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
+	enum rules_ {ANYTAG, ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
 		DIGIT, DOCTYPEDECL, DOCUMENT, EQ, FINISHTAG, ELEMENT, EMPTYTAGFINISH, ETAG, 
 		LETTER, MISC, NAME, NAMECHAR, PI_enum, REFERENCE, S_enum, SYSTEMLITERAL, WORD};
 
@@ -39,6 +39,8 @@ public:
 	void Attribute();
 	//beginTag ::= '<' Name (S Attribute)*
 	void beginTag();
+	
+	void anyTag();
 	//Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
 	//			lexer->nextChar();
 	//CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
@@ -60,7 +62,7 @@ public:
 	//finishTag ::= emptyTagFinish | compoundTagFinish
 	char* finishTag();
 	//element ::= beginTag S? finishTag
-	char* element();
+	void element();
 	//emptyTagFinish ::= '/>'
 	void emptyTagFinish();
 	//ETag ::= '</' Name S? '>'

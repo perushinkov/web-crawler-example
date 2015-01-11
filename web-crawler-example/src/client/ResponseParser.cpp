@@ -12,14 +12,19 @@ Response =	Status-Line
 			[ message-body ]	
 */
 void ResponseParser::parse(char * t) {
-	if (lexer_ != nullptr) {
+	/*if (lexer_ != nullptr) {
 		delete lexer_;
 	}
 	statusCode_ = 0;
 	lexer_ = new Lexer(t);
 		
 	parseStatusLine();
-	parseHeaders();
+	parseHeaders();*/
+	if (lexer_ != nullptr) {
+		delete lexer_;
+	}
+	lexer_ = new Lexer(t);
+	lexer_->matchUntil("\r\n\r\n");
 	pageContent_ = lexer_->getRemainingText();
 }
 

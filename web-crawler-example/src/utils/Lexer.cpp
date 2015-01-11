@@ -10,6 +10,10 @@ using namespace std;
 
 Lexer::Lexer(char * text) {
 	text_ = text;
+	int endOfFilePosition = stringUtil::findAinB("</html>", text_);
+	if (endOfFilePosition != -1)
+		*(text_ + endOfFilePosition + 7) = '\0';
+	char* test = text_ + endOfFilePosition;
 	pos_ = 0;
 }
 
@@ -127,7 +131,7 @@ char * Lexer::matchWord() {
 		  || (current >= 'a' && current <= 'z')) {
 		current = nextChar();
 	}
-	if (current == 0 || startPos == pos_) {
+	if (/*current == 0 || */startPos == pos_) {
 		throw new MatchException;
 	}
 

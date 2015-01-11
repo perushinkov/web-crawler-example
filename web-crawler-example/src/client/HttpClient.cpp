@@ -2,7 +2,7 @@
 #include <ws2tcpip.h>
 #include "../utils/StringUtil.h"
 
-#define RESPONSE_MAX_LENGTH 20000
+
 
 HttpClient::HttpClient(){
 	serverIp_ = "127.0.0.1";
@@ -77,6 +77,7 @@ int HttpClient::request(char * requestUri, char * host) {
 	query = stringUtil::concat(query, requestUri);
 	query = stringUtil::concat(query, " HTTP/1.1\nHOST:");
 	query = stringUtil::concat(query, host);
+	query = stringUtil::concat(query, "\nAccept: text/plain\n");
 	query = stringUtil::concat(query, "\n\n");
 	return send(sock_, query, strlen(query), 0);
 }
@@ -84,26 +85,18 @@ int HttpClient::request(char * requestUri, char * host) {
  * Fetches HTTP response.
  */
 char * HttpClient::getResponse() {
-	// Holder to contain the response. It is created huge,
-	// as we cannot tell beforehand what the size of the response is
-	char * text = (char *)malloc(RESPONSE_MAX_LENGTH);
-
 	// Assuming the response does not exceed the set maximum length,
-	// we get the response text into the char*text holder
-	
-	int received = recv(sock_, text, RESPONSE_MAX_LENGTH, 0);
-	
-	// Once we know the length of the received text, we allocate
-	// a holder just big enough to contain it
-	char * returnText = (char *)malloc(received+1);
-	// and copy the response text into it
-	*(text + received*sizeof(char)) = '\0';
-	stringUtil::copy(text, returnText, received);
-	
-	//Then we free the originally allocated memory, which we no longer need.
-	free(text);
-	//printf("\n\n%s\n\n", returnText);
-	return returnText;
+	// we get the response text into the holder
+	int received;
+	long total = 0;
+	do {
+		received = recv(sock_, text_ + total, RESPONSE_MAX_LENGTH - total, 0);
+		total += received;
+	} while (received!=-1 && received != 0);
+
+
+	*(text_ + total*sizeof(char) + 2) = '\0';
+	return text_;
 }
 
 char * HttpClient::getIp() {
@@ -114,9 +107,13 @@ char * HttpClient::getIp() {
  */
 char * HttpClient::getPage() {
 	char * response = getResponse();
-	//printf(response);
-	parser_->parse(response);
-	return parser_->getPageContent();
+	response += stringUtil::findAinB("<!DOCTYPE", response);
+	int final = stringUtil::findAinB("</html>", response);
+	if (final != -1)
+		response[final + 7] = '\0';
+	else
+		throw "wtf";
+	return response;
 }
 
 

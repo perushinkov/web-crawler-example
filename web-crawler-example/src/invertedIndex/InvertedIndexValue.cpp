@@ -11,10 +11,18 @@ int InvertedIndexValue::equals(void * object) {
 
 InvertedIndexValue::InvertedIndexValue(char * word) {
 	word_ = word;
+	posts_ = new BinNode<Posting>(nullptr, nullptr);
 }
 
-void InvertedIndexValue::addOccurence(int docId) {
-	//TODO
+void InvertedIndexValue::addOccurence(int docId, int howMany) {
+	Posting* posting = posts_->findByKey((void *)&docId);
+	if (posting == nullptr) {
+		posting = new Posting(docId);
+		posts_->add(posting);
+	}
+	else {
+		posting->increment(howMany);
+	}	
 }
 char * InvertedIndexValue::getWord() {
 	return word_;

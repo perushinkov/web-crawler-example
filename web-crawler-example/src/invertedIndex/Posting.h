@@ -13,7 +13,7 @@ private:
 	int occurences_;
 public:
 	Posting(int docId);
-	void increment();
+	void increment(int howMany);
 
 	int hasKey(void * ptr);
 	int equals(void * object);

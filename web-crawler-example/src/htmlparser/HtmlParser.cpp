@@ -32,18 +32,20 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 */
 char* HtmlParser::processLink(char* link) {
 	//REMOVE VARIABLES
-	link = stringUtil::substring(link, stringUtil::findAinB(link, "?"));
+	int questionMarkLocation = stringUtil::findAinB(link, "?");
+	if (questionMarkLocation != -1)
+		link = stringUtil::substring(link, questionMarkLocation);
 
 	// IF ABSOLUTE URL
-	if (stringUtil::findAinB("http://www", link) == 0) {
+	if (stringUtil::findAinB("http://", link) == 0) {
 		return link + 7;
 	}
 	int len = stringUtil::length(link);
 
 	// IF RELATIVE PATH TO A FILE
-	if ( (stringUtil::findAinB(link, ".htm") == len - 4 || 
-		stringUtil::findAinB(link, ".html") == len - 5) &&
-		stringUtil::findAinB(link, "http://www") == -1) {
+	if ( (stringUtil::findAinB(".htm", link) == len - 4 || 
+		stringUtil::findAinB(".html", link) == len - 5) &&
+		stringUtil::findAinB("http://", link) == -1) {
 		return stringUtil::concat(urlBase_, link);
 	}
 	// No other hrefs supported!
@@ -91,7 +93,7 @@ void HtmlParser::parse(char* t, char* url) {
 	if (links_ != nullptr) {
 		delete links_;
 	}
-	links_ = new BinNode<StraightIndexValue>(nullptr, nullptr);
+	links_ = new BinNode<StraightIndexValue>(nullptr, new StraightIndexValue("_"));
 	
 	lexer_ = new Lexer(t);
 	document();
@@ -103,14 +105,18 @@ void HtmlParser::parse(char* t, char* url) {
 void HtmlParser::Attribute() {
 	bool isHref = false;
 	char * attrName = Name();
-	if (isLink_ && !stringUtil::compare(attrName, "href")) {
+	if (!stringUtil::compare(attrName, "href")) {
 		isHref = true;
 	}
 	if (follows(EQ)) {
 		lexer_->nextChar();
 	}
 	if (isHref) {
-		link_ = SystemLiteral();
+		char* myhref = SystemLiteral();
+		char* mylink = processLink(myhref);
+		if (mylink != nullptr) {
+			updateIndex(links_, mylink);
+		}
 	} else {
 		SystemLiteral();
 	}
@@ -120,6 +126,7 @@ void HtmlParser::Attribute() {
 void HtmlParser::beginTag() {
 	isLink_ = false;
 	lexer_->match("<");
+	if (lexer_->isNext("/")) lexer_->nextChar();
 	char * tagName = Name();
 	if (stringUtil::compare(tagName, "a") == 0) {
 		isLink_ = true;
@@ -128,16 +135,31 @@ void HtmlParser::beginTag() {
 	while (follows(S_enum)) {
 		lexer_->nextChar();
 		if (follows(ATTRIBUTE)) {
-			Attribute();		
+			Attribute();
 		}
 	}
-	if (link_ != nullptr) {
-		char* mylink = processLink(link_);
-		if (mylink != nullptr) {
-			updateIndex(links_, mylink);
-		}	
-	}
 }
+//anyTag ::= '<' Name (S Attribute)* S?
+void HtmlParser::anyTag() {
+	isLink_ = false;
+	lexer_->match("<");
+	if (lexer_->isNext("/")) lexer_->nextChar();
+	char * tagName = Name();
+	if (stringUtil::compare(tagName, "a") == 0) {
+		isLink_ = true;
+	}
+	link_ = nullptr; // Is there a memory leak here?? Not sure what happens to old value.
+	while (follows(S_enum)) {
+		lexer_->nextChar();
+		if (follows(ATTRIBUTE)) {
+			Attribute();
+		}
+	}
+
+	if (lexer_->isNext("/")) lexer_->nextChar();
+	lexer_->match(">");
+}
+
 //Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
 //lexer->nextChar();	
 
@@ -168,11 +190,11 @@ char* HtmlParser::compoundTagFinish() {
 //content ::= (element | CharData | Reference | PI | Comment)*
 void HtmlParser::content() {
 	while(true) {
-		if (follows(ELEMENT)) {
-			char* endOfDoc = element();
-			if (endOfDoc != nullptr && stringUtil::compare(endOfDoc, "html")) { // HTML fix
-				break;
-			}
+		if (lexer_->lookahead(0) == '\0') break;
+
+		if (follows(ANYTAG)){
+			//element();
+			anyTag();
 		} else if (follows(CHARDATA)) {
 			CharData();
 		} else if (follows(REFERENCE)) {
@@ -194,10 +216,9 @@ void HtmlParser::doctypedecl() {
 }
 //document ::= Misc* (doctypedecl Misc*)? element Misc* 
 void HtmlParser::document() {
+
 	lexer_->matchUntil("<"); // HTML fix
-	while (follows(MISC)) {
-		Misc();
-	}
+
 	if (follows(DOCTYPEDECL)) {
 		doctypedecl();
 		while (follows(MISC)) {
@@ -205,7 +226,8 @@ void HtmlParser::document() {
 		}
 	}
 	
-	element();
+	//element();
+	content();
 
 	while (follows(MISC)) {
 		Misc();
@@ -223,7 +245,7 @@ void HtmlParser::Eq() {
 }
 //finishTag ::= emptyTagFinish | compoundTagFinish
 char* HtmlParser::finishTag() {
-	if (follows(EMPTYTAGFINISH)) {
+	if (follows(EMPTYTAGFINISH)) { //HTML fix
 		emptyTagFinish();
 	} else if(follows(COMPOUNDTAGFINISH)) {
 		return compoundTagFinish();
@@ -233,13 +255,15 @@ char* HtmlParser::finishTag() {
 	return nullptr;
 }
 //element ::= beginTag finishTag
-char* HtmlParser::element() {
+void HtmlParser::element() {
 	beginTag();
-	return finishTag();
+	ETag();
 }
 //emptyTagFinish ::= '/>'
 void HtmlParser::emptyTagFinish() {
-	lexer_->match("/>");
+	if (lexer_->isNext("/>"))
+		lexer_->match("/>");
+	lexer_->match(">");
 }
 //ETag ::= '</' Name S? '>'
 char* HtmlParser::ETag() {
@@ -388,6 +412,18 @@ bool HtmlParser::follows(rules_ rule) {
 				|| val2 == ':'
 				|| (val2 >= 'A' && val2 <= 'Z')
 				|| (val2 >= 'a' && val2 <= 'z'))) {
+			return true;
+		}
+		break;
+	}
+	case ANYTAG: // <[_:A-Za-z/]
+	{
+		char val2 = lexer_->lookahead(1);
+		if (val == '<'
+			&& (val2 == '_'
+			|| val2 == ':' || val2 == '/'
+			|| (val2 >= 'A' && val2 <= 'Z')
+			|| (val2 >= 'a' && val2 <= 'z'))) {
 			return true;
 		}
 		break;

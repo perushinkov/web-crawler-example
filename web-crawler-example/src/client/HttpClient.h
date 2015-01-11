@@ -6,8 +6,11 @@ using namespace std;
 
 #include <winsock2.h>
 
+#define RESPONSE_MAX_LENGTH 100000
+
 class HttpClient {
 private:
+	char text_[RESPONSE_MAX_LENGTH];
 	int errorCode_; // Negative for errors, 0 for no errors 
 	int sock_;
 

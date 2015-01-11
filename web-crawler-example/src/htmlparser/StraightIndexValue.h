@@ -1,8 +1,5 @@
 #ifndef __STRAIGHTINDEXVALUE_H
 #define __STRAIGHTINDEXVALUE_H 1
-/*
- * TODO: Finish this
- */
 
 class StraightIndexValue {
 private:

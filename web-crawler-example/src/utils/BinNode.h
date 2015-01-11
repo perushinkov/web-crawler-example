@@ -7,9 +7,9 @@
 template <class T>
 class BinNode {
 private:
-	BinNode * parent_;
-	BinNode * leftChild_;
-	BinNode * rightChild_;
+	BinNode<T> * parent_;
+	BinNode<T> * leftChild_;
+	BinNode<T> * rightChild_;
 	T * content_;
 public:
 	BinNode() {
@@ -78,6 +78,40 @@ public:
 			leftChild_ = new BinNode<T>(this, entry);
 		}
 		return true;
+	}
+
+	/*
+		Some memory management
+	*/
+	void deleteAll() {
+		delete content_;
+		if (leftChild_ != nullptr) {
+			leftChild_->deleteAll();
+		}
+		if (rightChild_ != nullptr) {
+			rightChild_->deleteAll();
+		}
+	}
+	/*
+		Forward Iterator functionality
+	*/
+	BinNode<T>* next() {
+		if (leftChild_ != nullptr) return leftChild_;
+		if (rightChild_ != nullptr) return rightChild_;
+
+		BinNode<T>* lastOne = this;
+		while (lastOne->parent_ != nullptr) {
+			if (lastOne->parent_->leftChild_ == lastOne && lastOne->parent_->rightChild_ != nullptr) {
+				return lastOne->parent_->rightChild_;
+			}
+			lastOne = lastOne->parent_;
+			continue;
+		}
+		return nullptr;
+	}
+
+	T* getContent() {
+		return content_;
 	}
 };
 

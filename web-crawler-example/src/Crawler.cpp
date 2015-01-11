@@ -14,14 +14,17 @@ Crawler::Crawler(char * startingAddress) {
 }
 void Crawler::crawl() {
 	while (siteMap_->hasNextUrl()) {
+		client_ = new HttpClient();
 		char * url = siteMap_->getNextUrl();
 		client_->init(HttpClient::getHostFromUrl(url));
 		client_->request(HttpClient::getUriFromUrl(url), client_->getIp());
 		char * page = client_->getPage();
+		htmlParser_ = new HtmlParser();
 		htmlParser_->parse(page, url);
-		siteMap_->updateMap(htmlParser_->getLinks());
-		invertedIndex_->updateIndex(htmlParser_->getWords());
-		cout << "TheEnd!";
+		siteMap_->updateMap(htmlParser_->getLinks(), url);
+		invertedIndex_->updateIndex(htmlParser_->getWords(), siteMap_->getDocId(url));
+		
+		siteMap_->printPrettyPicture();
 	}
 }
 	/*
@@ -42,6 +45,6 @@ FAIL:
 
 
 void main() {
-	Crawler myCrawler("crawlertest.cs.tu-varna.bg");
+	Crawler myCrawler("new.tu-varna.bg/index.php/bg/");
 	myCrawler.crawl();
 }

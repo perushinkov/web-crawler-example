@@ -80,7 +80,7 @@ int stringUtil::findAinB(char * a, char * b) {
 	int a_len = length(a);
 	int b_len = length(b);
 	bool match = false;
-	for (int i = 0; i < b_len -a_len; i++) {
+	for (int i = 0; i <= b_len -a_len; i++) {
 		match = true;
 		for (int j = 0; j < a_len; j++) {
 			if (a[j] != b[j + i]) {

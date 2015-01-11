@@ -15,7 +15,7 @@ private:
 	BinNode<Posting> * posts_;
 public:
 	InvertedIndexValue(char * word);
-	void addOccurence(int docId);
+	void addOccurence(int docId, int howMany);
 
 	int hasKey(void * ptr);
 	int equals(void * object);
