@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Header Files\client">
-      <UniqueIdentifier>{71763fc4-1b85-4bbc-982e-90a62f278dff}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\invertedIndex">
       <UniqueIdentifier>{6b2b6dea-e924-43a7-a1db-ccbabad42b77}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\sitemap">
       <UniqueIdentifier>{9497cdaf-9e2f-4a79-a097-ffc5673521ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\client">
+      <UniqueIdentifier>{71763fc4-1b85-4bbc-982e-90a62f278dff}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +126,9 @@
     </ClCompile>
     <ClCompile Include="src\utils\Lexer.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="NewMain.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,7 @@
 #include "StraightIndexValue.h"
 #include "string.h"
+#include <iostream>
+using namespace std;
 StraightIndexValue::StraightIndexValue(char * word) {
 	word_ = word;
 	occurences_ = 1;
@@ -31,7 +33,11 @@ int StraightIndexValue::equals(void * object) {
 	char * objectWord = ((StraightIndexValue*)object)->getWord();
 	return this->hasKey((void *) objectWord);
 }
-
+void StraightIndexValue::print() {
+	printf("Word %s occurs %d times\n", word_, occurences_);
+	this->occurences_;
+	this->word_;
+}
 
 char * StraightIndexValue::getWord() {
 	return word_;

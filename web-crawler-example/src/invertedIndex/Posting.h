@@ -18,6 +18,7 @@ public:
 	int hasKey(void * ptr);
 	int equals(void * object);
 
+	void print();
 	//Getters and Setters
 	int getDocId();
 	int getOccurences();

@@ -90,7 +90,8 @@ void Lexer::match(char * txt) {
  */
 int Lexer::matchUntil(char * txt) {
 	int displacement = stringUtil::findAinB(txt, text_ + pos_);
-	pos_ += displacement;
+	if (displacement != -1)
+		pos_ += displacement;
 	return displacement;
 }
 
@@ -121,18 +122,18 @@ long Lexer::matchNumber() {
 	return num;
 }
 /**
- * Matches word containing English letters.
- * Words are reduced to lowerCase.
- */
+* Matches word containing English letters.
+* Words are reduced to lowerCase.
+*/
 char * Lexer::matchWord() {
 	int startPos = pos_;
 	char current = text_[pos_];
-	while((current >= 'A' && current <= 'Z')
-		  || (current >= 'a' && current <= 'z')) {
+	while ((current >= 'A' && current <= 'Z')
+		|| (current >= 'a' && current <= 'z')) {
 		current = nextChar();
 	}
 	if (/*current == 0 || */startPos == pos_) {
-		throw new MatchException;
+		return nullptr;
 	}
 
 
@@ -140,6 +141,21 @@ char * Lexer::matchWord() {
 	stringUtil::toLower(word);
 	return word;
 }
+
+/**
+* Finds next word and returns it or returns nullptr.
+*/
+char * Lexer::findWord() {
+	char current = text_[pos_];
+	while (!((current >= 'A' && current <= 'Z')
+		|| (current >= 'a' && current <= 'z')) && 
+		current != '\0') {
+		current = nextChar();
+	}
+	if (current != '\0') return matchWord();
+	return nullptr;
+}
+
 char Lexer::lookahead(int howmuch) {
 	return *(text_ + pos_ + howmuch);
 }

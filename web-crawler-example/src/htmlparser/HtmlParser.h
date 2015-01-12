@@ -10,17 +10,16 @@
  */
 class HtmlParser {
 private:
-	enum rules_ {ANYTAG, ATTRIBUTE, BEGINTAG, CHAR, CHARDATA, COMMENT, COMPOUNDTAGFINISH, CONTENT, 
-		DIGIT, DOCTYPEDECL, DOCUMENT, EQ, FINISHTAG, ELEMENT, EMPTYTAGFINISH, ETAG, 
-		LETTER, MISC, NAME, NAMECHAR, PI_enum, REFERENCE, S_enum, SYSTEMLITERAL, WORD};
+	enum rules_ {ANYTAG, ATTRIBUTE, CHAR, CHARDATA, NAME, NAMECHAR, REFERENCE, S_enum, SYSTEMLITERAL, WORD};
 
 	BinNode<StraightIndexValue> * index_;
 	BinNode<StraightIndexValue> * links_;
 	Lexer * lexer_;
 
-	bool isLink_;
-	char* link_;
 	char* urlBase_;
+	
+	char* attrName_;
+	char* attrValue_;
 
 	void updateIndex(BinNode<StraightIndexValue> * anyIndex, char * word);
 	bool follows(rules_ rule);
@@ -35,53 +34,13 @@ public:
 
 	void parse(char * page, char * url);
 
-	//Attribute ::= Name Eq SystemLiteral
-	void Attribute();
-	//beginTag ::= '<' Name (S Attribute)*
-	void beginTag();
 	
+	void Attribute();	
 	void anyTag();
-	//Char ::= <CR> | <LineFeed> | <tab> | <space>..(255)
-	//			lexer->nextChar();
-	//CharData ::= [^<&]* - ([^<&]* ']]>' [^<&]*)
 	void CharData();
-	//Comment ::= '<!--' ((Char - '-') | ('-' (Char - '-')))* '-->'
-	void Comment();
-	//compoundTagFinish ::= '>' content ETag
-	char* compoundTagFinish();
-	//content ::= (element | CharData | Reference | PI | Comment)*
 	void content();
-	//Digit ::= '0'..'9'
-	//			lexer->nextChar();
-	//doctypedecl ::= '<!DOCTYPE' <^[>]> '>'
-	void doctypedecl();
-	//document ::= Misc* (doctypedecl Misc*)? element Misc* 
-	void document();
-	//Eq ::= S? '=' S?
-	void Eq();
-	//finishTag ::= emptyTagFinish | compoundTagFinish
-	char* finishTag();
-	//element ::= beginTag S? finishTag
-	void element();
-	//emptyTagFinish ::= '/>'
-	void emptyTagFinish();
-	//ETag ::= '</' Name S? '>'
-	char* ETag();
-	//Letter ::= [A-Za-z]
-	void Letter();
-	//Misc ::= Comment | PI |  S
-	void Misc();
-	//Name ::= (Letter | '_' | ':') (NameChar)*
 	char * Name();
-	//NameChar ::= Letter | Digit | '.' | '-' | '_' | ':';
-	//		lexer->nextChar();
-	//PI ::= '<?' <^[?]> '?>'
-	void PI();
-	//Reference ::= '&' Name ';' | '&#' [0-9]+ ';' | '&#x' [0-9a-fA-F]+ ';'
 	void Reference();
-	//S ::= (<space>(32) | <tab>(9) | <CR>(13) | <LF>(10))+
-	//		lexer->nextChar();
-	//SystemLiteral	::=	('"' [^"]* '"') | ("'" [^']* "'")
 	char * SystemLiteral();
 };
 

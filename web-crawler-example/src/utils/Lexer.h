@@ -25,6 +25,7 @@ public:
 	char * getRemainingText();
 	long matchNumber();
 	char * matchWord();
+	char * findWord();
 	char lookahead(int howmuch);
 	char * fetchLastNChars(int n);
 };

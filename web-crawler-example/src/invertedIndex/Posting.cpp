@@ -1,5 +1,6 @@
 #include "Posting.h"
-
+#include <iostream>
+using namespace std;
 Posting::Posting(int docId) {
 	docId_ = docId;
 	occurences_ = 0;
@@ -25,8 +26,13 @@ int Posting::hasKey(void * ptr) {
 int Posting::equals(void * object) {
 
 	int objectDocId = ((Posting*)object)->getDocId();
-	void * p_int = &objectDocId; 
+	void * p_int = &objectDocId;
 	return hasKey(p_int);
+}
+
+
+void Posting::print() {
+	printf("Doc %d holds %d occurences \n", docId_, occurences_);
 }
 
 

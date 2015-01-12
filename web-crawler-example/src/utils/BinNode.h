@@ -81,7 +81,7 @@ public:
 	}
 
 	/*
-		Some memory management
+	Some memory management
 	*/
 	void deleteAll() {
 		delete content_;
@@ -90,6 +90,21 @@ public:
 		}
 		if (rightChild_ != nullptr) {
 			rightChild_->deleteAll();
+		}
+	}
+
+	/*
+		Printer
+	*/
+	void print() {
+		
+		if (leftChild_ != nullptr) {
+			leftChild_->print();
+		}
+		if (content_ != nullptr)
+			content_->print();
+		if (rightChild_ != nullptr) {
+			rightChild_->print();
 		}
 	}
 	/*

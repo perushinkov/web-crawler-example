@@ -19,7 +19,7 @@ public:
 
 	int hasKey(void * ptr);
 	int equals(void * object);
-
+	void print();
 	char * getWord();
 };
 

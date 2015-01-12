@@ -13,6 +13,7 @@ public:
 	int hasKey(void * ptr);
 	int equals(void * object);
 
+	void print();
 	//Getters and setters
 	char * getWord();
 	int getOccurences();

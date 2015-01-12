@@ -10,7 +10,6 @@
  */
 class Crawler {
 private:
-	HttpClient * client_;
 	SiteMap * siteMap_;
 	HtmlParser * htmlParser_;
 	InvertedIndex * invertedIndex_;
