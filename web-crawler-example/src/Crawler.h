@@ -15,7 +15,6 @@ private:
 	InvertedIndex * invertedIndex_;
 public:
 	Crawler(char * startingAddress);
-	void crawl();
 };
 
 #endif

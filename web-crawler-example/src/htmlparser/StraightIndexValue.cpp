@@ -32,6 +32,7 @@ int StraightIndexValue::hasKey(void * ptr) {
 int StraightIndexValue::equals(void * object) {
 	char * objectWord = ((StraightIndexValue*)object)->getWord();
 	return this->hasKey((void *) objectWord);
+	return 0;
 }
 void StraightIndexValue::print() {
 	printf("Word %s occurs %d times\n", word_, occurences_);

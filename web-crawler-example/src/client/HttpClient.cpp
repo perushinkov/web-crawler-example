@@ -1,5 +1,5 @@
 #include "HttpClient.h"
-#include <ws2tcpip.h>
+#include <Winsock2.h>
 #include "../utils/StringUtil.h"
 
 char* httpClient::getHostFromUrl(char* url) {
@@ -64,7 +64,7 @@ char * httpClient::getResponse(char * url) {
 	if (text[9] != '2') //Checking status code 
 		return nullptr;
 	do {
-		newAmount = recv(sock_, text+received, 10000, 0);
+		newAmount = recv(sock_, text+received, 7000, 0);
 		received += newAmount;
 	} while (newAmount > 0);
 	

@@ -1,6 +1,8 @@
 #include "SiteMap.h"
 #include <algorithm>
 #include "../utils/StringUtil.h"
+#include <string>
+using namespace std;
 SiteMap::SiteMap(char * startingAddress) {
 	linksToBeCrawled_.push_back(startingAddress);
 	current_ = 0;
@@ -48,12 +50,13 @@ void SiteMap::updateMap(BinNode<StraightIndexValue> * links, char* parentUrl) {
 
 int SiteMap::getDocId(char * url) {
 	return urlIds_[url];
+	return 0;
 }
 
 void SiteMap::printPrettyPicture() {
 	system("cls");
 	
-	/*for (int x = 0; x < 2 + 2 * (urlGraph_.rbegin()->first + 1); x++) {
+	for (int x = 0; x < 2 + 2 * (urlGraph_.rbegin()->first + 1); x++) {
 		for (int y = 0; y < 2 + 3 * (urlGraph_.rbegin()->first + 1); y++) {
 			// UI Filters applied here
 			if (x == 1 && y % 3 == 0 && y > 1)  printf("%c", 186);
@@ -64,31 +67,21 @@ void SiteMap::printPrettyPicture() {
 			else if (x == 0 && y > 1 && (y-1) % 3 == 0) printf("%c", '\\');
 			else {
 				if (y % 3 == 0 && y > 1) {
-					int source = (y - 3) / 3;
-					if (urlGraph_.find(source) != urlGraph_.end() && urlGraph_[source].size() > 0) {
-						int lastPower = urlGraph_[source].at(urlGraph_[source].size() - 1);
-						int destination = (x - 2) / 2;
-						if (destination < lastPower) {
-							printf("%c", 186);
-						}
-						else if (destination == lastPower) {
-							printf("%c", 188);
-						}
-					}
-				}
-				printf(" ");
+
+					std::printf("%c", 186);
+				} else std::printf(" ");
 			}
 		}
-		printf("\n");
+		std::printf("\n");
 	}
-	*/
+	
 
 	printf("Legend:\n");
 	typedef std::map<int, std::vector<int>>::iterator it_type;
 
 	for (it_type iterator = urlGraph_.begin(); iterator != urlGraph_.end(); iterator++) {
 		printf("%c -> %s \n", 'A' + iterator->first, idUrls_[iterator->first].c_str());
-		for (int x = 0; x < 3; x++) {
+		/*for (int x = 0; x < 3; x++) {
 			for (int y = 0; y < 79; y++) {
 				if (x == 0 && y == 0) printf("%c", 'A' + iterator->first);
 				else { 
@@ -107,7 +100,7 @@ void SiteMap::printPrettyPicture() {
 				}
 			}
 			printf("\n");
-		}
+		}//*/
 	}
 
 

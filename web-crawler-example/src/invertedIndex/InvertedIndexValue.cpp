@@ -28,7 +28,7 @@ void InvertedIndexValue::addOccurence(int docId, int howMany) {
 	}
 	else {
 		posting->increment(howMany);
-	}	
+	}
 }
 char * InvertedIndexValue::getWord() {
 	return word_;

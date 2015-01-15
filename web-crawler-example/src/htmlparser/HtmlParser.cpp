@@ -196,7 +196,7 @@ char * HtmlParser::Name() {
 		lexer_->nextChar();
 		i++;
 	}
-	return lexer_->fetchLastNChars(i);
+	return lexer_->fetchLastNChars(i);	
 }
 
 //Reference ::= ('&' Name | '&#' [0-9]+ | '&#x' [0-9a-fA-F]+) ';'

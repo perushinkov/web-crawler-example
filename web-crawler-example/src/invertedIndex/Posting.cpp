@@ -28,11 +28,12 @@ int Posting::equals(void * object) {
 	int objectDocId = ((Posting*)object)->getDocId();
 	void * p_int = &objectDocId;
 	return hasKey(p_int);
+	return 0;
 }
 
 
 void Posting::print() {
-	printf("Doc %d holds %d occurences \n", docId_, occurences_);
+	//printf("Doc %d holds %d occurences \n", docId_, occurences_);
 }
 
 
