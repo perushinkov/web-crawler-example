@@ -39,10 +39,10 @@ void SiteMap::updateMap(BinNode<StraightIndexValue> * links, char* parentUrl) {
 		if (urlIds_.find(url) == urlIds_.end()) {
 			urlIds_[url] = id;
 			idUrls_[id] = url;
-			outcoming.push_back(id);
 			id++;
 			linksToBeCrawled_.push_back(url);
 		}
+		outcoming.push_back(urlIds_[url]);
 		links = links->next();
 	} while (links != nullptr);
 	urlGraph_[urlIds_[parentUrl]] = outcoming;
@@ -56,8 +56,8 @@ int SiteMap::getDocId(char * url) {
 void SiteMap::printPrettyPicture() {
 	system("cls");
 	
-	for (int x = 0; x < 2 + 2 * (urlGraph_.rbegin()->first + 1); x++) {
-		for (int y = 0; y < 2 + 3 * (urlGraph_.rbegin()->first + 1); y++) {
+	for (int x = 0; x < 2 + 2 * (urlIds_.size() + 1); x++) {
+		for (int y = 0; y < 2 + 3 * (urlIds_.size() + 1); y++) {
 			// UI Filters applied here
 			if (x == 1 && y % 3 == 0 && y > 1)  printf("%c", 186);
 			else if (x == 1 || y == 1) printf("%c", 178);
@@ -66,9 +66,15 @@ void SiteMap::printPrettyPicture() {
 			else if (x == 0 && y > 1 && (y+1) % 3 == 0) printf("%c", '/');
 			else if (x == 0 && y > 1 && (y-1) % 3 == 0) printf("%c", '\\');
 			else {
-				if (y % 3 == 0 && y > 1) {
+				if (y % 3 == 0 && y > 1 && urlGraph_.find((y-3)/3) != urlGraph_.end() && urlGraph_[(y-3)/3].size() != 0) {
+					int sourceId = (y-3)/3;
+					
+					int lastDest = urlGraph_[sourceId].back();
+					int lastDestX = 2 + 2 * lastDest;
+					if (x < lastDestX) std::printf("%c", 186);
+					else if (x == lastDestX) std::printf("%c", 188);
+					else std::printf("%c", ' ');
 
-					std::printf("%c", 186);
 				} else std::printf(" ");
 			}
 		}
@@ -79,28 +85,8 @@ void SiteMap::printPrettyPicture() {
 	printf("Legend:\n");
 	typedef std::map<int, std::vector<int>>::iterator it_type;
 
-	for (it_type iterator = urlGraph_.begin(); iterator != urlGraph_.end(); iterator++) {
-		printf("%c -> %s \n", 'A' + iterator->first, idUrls_[iterator->first].c_str());
-		/*for (int x = 0; x < 3; x++) {
-			for (int y = 0; y < 79; y++) {
-				if (x == 0 && y == 0) printf("%c", 'A' + iterator->first);
-				else { 
-					int size = iterator->second.size();
-					if (size > 0) {
-						if (y < *iterator->second.rbegin()) {
-							if (find(iterator->second.rbegin(), iterator->second.rend(), (y - 3) / 3) != iterator->second.rend()) { 
-								if (x == 0) printf("%c", 203);
-								else if (x == 1) printf("%c", 208);
-								else printf("%c", 'A' + ((y - 3) / 3));
-							} else printf("%c", 205); 
-						}
-						else if (x == 0 && y == *iterator->second.rbegin()) printf("%c", 187);
-					}
-					else printf(" ");
-				}
-			}
-			printf("\n");
-		}//*/
+	for (int i = 0; i < urlIds_.size(); i++) {
+		printf("%c -> %s \n", 'A' + i, idUrls_[i].c_str());
 	}
 
 

@@ -35,4 +35,5 @@ void main() {
 
 		siteMap.printPrettyPicture();
 	}
+	std::system("pause");
 }

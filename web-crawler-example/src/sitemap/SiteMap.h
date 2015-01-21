@@ -22,7 +22,7 @@ public:
 	char* getNextUrl(); 
 	bool hasNextUrl();
 	int getDocId(char * url);
-	void updateMap(BinNode<StraightIndexValue> * links_, char* parentUrl); // TODO
+	void updateMap(BinNode<StraightIndexValue> * links_, char* parentUrl); 
 	void printPrettyPicture();
 };
 
