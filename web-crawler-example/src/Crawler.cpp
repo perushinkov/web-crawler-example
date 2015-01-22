@@ -8,6 +8,7 @@
 #include <ws2tcpip.h>
 #include <windows.h>
 #include <iostream>
+#include <map>
 using namespace std;
 
 void main() {
@@ -64,11 +65,17 @@ void main() {
 			scanf("%s", word);
 			InvertedIndexValue* result = index.searchWord(word);
 			BinNode<Posting>* postings = result->getPostings();
+			map<int, string> searchResults;
 			do {
-				if (postings->getContent() != nullptr)
-					printf("\t%d\t\t%s\n", postings->getContent()->getOccurences(), siteMap.getUrlById(postings->getContent()->getDocId()).c_str());
+				if (postings->getContent() != nullptr) {
+					searchResults[postings->getContent()->getOccurences()] = siteMap.getUrlById(postings->getContent()->getDocId());
+				}
 				postings = postings->next();
 			} while (postings != nullptr);
+			printf("\n");
+			for (map<int, string>::reverse_iterator it = searchResults.rbegin(); it != searchResults.rend(); it++) {
+				printf("%d -> %s\n", it->first, it->second.c_str());
+			}
 			system("pause");
 			break;
 		}

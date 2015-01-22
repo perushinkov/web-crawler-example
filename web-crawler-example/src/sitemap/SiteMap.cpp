@@ -63,8 +63,8 @@ int SiteMap::getDocId(char * url) {
 void SiteMap::printPrettyPicture() {
 	system("cls");
 	
-	for (int x = 0; x < 2 + 2 * (urlIds_.size() + 1); x++) {
-		for (int y = 0; y < 2 + 3 * (urlIds_.size() + 1); y++) {
+	for (int x = 0; x < 2 + 2 * urlIds_.size(); x++) {
+		for (int y = 0; y < 2 + 3 * urlIds_.size(); y++) {
 			// UI Filters applied here
 			if (x == 1 && y % 3 == 0 && y > 1)  printf("%c", 186);
 			else if (x == 1 || y == 1) printf("%c", 178);
