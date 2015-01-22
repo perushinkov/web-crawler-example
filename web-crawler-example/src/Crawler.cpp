@@ -66,8 +66,9 @@ void main() {
 			BinNode<Posting>* postings = result->getPostings();
 			do {
 				if (postings->getContent() != nullptr)
-					printf("\t%d\t\t%s\n", postings->getContent()->getOccurences(), siteMap.getUrlById(postings->getContent()->getDocId()));
-			} while (postings->next() != nullptr);
+					printf("\t%d\t\t%s\n", postings->getContent()->getOccurences(), siteMap.getUrlById(postings->getContent()->getDocId()).c_str());
+				postings = postings->next();
+			} while (postings != nullptr);
 			system("pause");
 			break;
 		}
