@@ -89,9 +89,6 @@ public:
 
 	*/
 
-
-
-
 	void parse(char * page, char * url);
 
 	

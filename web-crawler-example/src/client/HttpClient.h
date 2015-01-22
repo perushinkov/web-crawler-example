@@ -5,7 +5,7 @@ using namespace std;
 #include <winsock2.h>
 #include "../utils/StringUtil.h"
 
-#define RESPONSE_MAX_LENGTH 80000
+#define RESPONSE_MAX_LENGTH 40000
 
 namespace httpClient {
 	/*
