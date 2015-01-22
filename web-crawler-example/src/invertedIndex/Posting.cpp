@@ -33,7 +33,7 @@ int Posting::equals(void * object) {
 
 
 void Posting::print() {
-	//printf("Doc %d holds %d occurences \n", docId_, occurences_);
+	printf("%d\t - \t%s\n", occurences_, docId_);
 }
 
 

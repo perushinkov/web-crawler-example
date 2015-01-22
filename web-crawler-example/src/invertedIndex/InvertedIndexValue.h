@@ -21,6 +21,8 @@ public:
 	int equals(void * object);
 	void print();
 	char * getWord();
+
+	BinNode<Posting> * getPostings();
 };
 
 #endif

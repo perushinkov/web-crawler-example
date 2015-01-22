@@ -25,15 +25,17 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 */
 char* HtmlParser::processLink(char* link) {
 	//REMOVE VARIABLES
-	int questionMarkLocation = stringUtil::findAinB(link, "?");
+	int questionMarkLocation = stringUtil::findAinB("?", link);
 	if (questionMarkLocation != -1)
 		link = stringUtil::substring(link, questionMarkLocation);
-
+	int len = stringUtil::length(link);
 	// IF ABSOLUTE URL
-	if (stringUtil::findAinB("http://", link) == 0) {
+	if (stringUtil::findAinB("http://", link) == 0 &&
+		(stringUtil::findAinB(".htm", link) == len - 4 ||
+		stringUtil::findAinB(".html", link) == len - 5)) {
 		return link + 7;
 	}
-	int len = stringUtil::length(link);
+	
 
 	// IF RELATIVE PATH TO A FILE
 	if ( (stringUtil::findAinB(".htm", link) == len - 4 || 
@@ -41,6 +43,7 @@ char* HtmlParser::processLink(char* link) {
 		stringUtil::findAinB("http://", link) == -1) {
 		return stringUtil::concat(urlBase_, link);
 	}
+
 	// No other hrefs supported!
 	return nullptr;
 }
@@ -124,8 +127,8 @@ void HtmlParser::anyTag() {
 		if (follows(ATTRIBUTE)) {
 			Attribute();
 		}
-		if (!stringUtil::compare(tagName, "a") &&
-			!stringUtil::compare(attrName_, "href")) {
+		if (/*(!stringUtil::compare(tagName, "a") || !stringUtil::compare(tagName, "area")) &&
+			*/!stringUtil::compare(attrName_, "href")) {
 			char* mylink = processLink(attrValue_);
 			if (mylink != nullptr) {
 				updateIndex(links_, mylink);
@@ -145,11 +148,11 @@ void HtmlParser::anyTag() {
 
 		Lexer lexer(attrValue_);
 		char* word = lexer.findWord();
-		do {
+		while (word != nullptr) {
 			stringUtil::toLower(word);
 			updateIndex(index_, word);
 			word = lexer.findWord();
-		} while (word != nullptr);
+		}
 	}
 
 	if (lexer_->isNext("/")) lexer_->nextChar();

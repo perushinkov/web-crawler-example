@@ -12,7 +12,9 @@ private:
 	BinNode<InvertedIndexValue>* wordIndex_;
 public:
 	InvertedIndex();
-	void updateIndex(BinNode<StraightIndexValue> * links_, int docId); // TODO
+	void updateIndex(BinNode<StraightIndexValue> * links_, int docId);
+	void printIndex();
+	InvertedIndexValue* searchWord(char * word);
 };
 
 #endif

@@ -115,7 +115,7 @@ void stringUtil::toLower(char * text) {
 	int pos = 0;
 	while (1) {
 		if (text[pos] == '\0') break;
-		if (text[pos] > 'A' && text[pos] < 'Z') {
+		if (text[pos] >= 'A' && text[pos] <= 'Z') {
 			text[pos] += 'a' - 'A';		
 		}
 		pos++;

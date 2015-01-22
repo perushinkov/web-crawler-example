@@ -10,6 +10,13 @@ SiteMap::SiteMap(char * startingAddress) {
 	idUrls_[0] = startingAddress;
 }
 
+string SiteMap::getUrlById(int id) {
+	if (idUrls_.find(id) != idUrls_.end()) {
+		return idUrls_[id];
+	}
+	return "";
+}
+
 char* SiteMap::getNextUrl() {
 	if (current_ >= linksToBeCrawled_.size())
 		return nullptr;
@@ -68,13 +75,29 @@ void SiteMap::printPrettyPicture() {
 			else {
 				if (y % 3 == 0 && y > 1 && urlGraph_.find((y-3)/3) != urlGraph_.end() && urlGraph_[(y-3)/3].size() != 0) {
 					int sourceId = (y-3)/3;
-					
-					int lastDest = urlGraph_[sourceId].back();
+					vector<int> targets = urlGraph_[sourceId];
+					bool targetHere = false;
+					int lastDest = *std::max_element(std::begin(targets), std::end(targets));
 					int lastDestX = 2 + 2 * lastDest;
-					if (x < lastDestX) std::printf("%c", 186);
+					if (x % 2 == 0 && find(targets.begin(), targets.end(), (x - 2) / 2) != targets.end()) {
+						targetHere = true;
+					}
+					if (x < lastDestX) { 
+						if (targetHere) std::printf("%c", 185);
+						else std::printf("%c", 186);					
+					}
 					else if (x == lastDestX) std::printf("%c", 188);
 					else std::printf("%c", ' ');
 
+				}
+				else if (y % 3 == 2 && y > 1 && urlGraph_.find((y - 2) / 3) != urlGraph_.end() && urlGraph_[(y - 2) / 3].size() != 0) {
+					vector<int> targets = urlGraph_[(y - 2) / 3];
+					if (x % 2 == 0 && find(targets.begin(), targets.end(), (x - 2) / 2) != targets.end()) std::printf("%c", 205);
+					else std::printf(" ");
+				} else if (y % 3 == 1 && y > 1 && urlGraph_.find((y - 1) / 3) != urlGraph_.end() && urlGraph_[(y - 1) / 3].size() != 0) {
+					vector<int> targets = urlGraph_[(y - 1) / 3];
+					if (x % 2 == 0 && find(targets.begin(), targets.end(), (x - 2) / 2) != targets.end()) std::printf("%c", (x - 2) / 2 + 'A');
+					else std::printf(" ");
 				} else std::printf(" ");
 			}
 		}

@@ -14,7 +14,7 @@ void InvertedIndex::updateIndex(BinNode<StraightIndexValue> * words, int docId) 
 		char* word = docWithWords->getWord();
 		int occurence = docWithWords->getOccurences();
 
-		InvertedIndexValue* wordWithPostings = wordIndex_->findByKey((void*)&word);
+		InvertedIndexValue* wordWithPostings = wordIndex_->findByKey((void*)word);
 		if (wordWithPostings != nullptr) {
 			wordWithPostings->addOccurence(docId, occurence);
 		}
@@ -25,4 +25,12 @@ void InvertedIndex::updateIndex(BinNode<StraightIndexValue> * words, int docId) 
 		}
 		words = words->next();
 	} while (words != nullptr);
+}
+
+ InvertedIndexValue* InvertedIndex::searchWord(char * word) {
+	return wordIndex_->findByKey((void *)word);
+}
+
+void InvertedIndex::printIndex() {
+	wordIndex_->print();
 }

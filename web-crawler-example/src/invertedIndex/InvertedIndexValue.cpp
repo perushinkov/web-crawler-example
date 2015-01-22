@@ -3,7 +3,7 @@
 #include <iostream>
 using namespace std;
 int InvertedIndexValue::hasKey(void * key) {
-	return strcmp((char *)key, word_);
+	return strcmp(word_, (char *)key);
 }
 
 int InvertedIndexValue::equals(void * object) {
@@ -26,10 +26,13 @@ void InvertedIndexValue::addOccurence(int docId, int howMany) {
 		posting = new Posting(docId);
 		posts_->add(posting);
 	}
-	else {
-		posting->increment(howMany);
-	}
+	posting->increment(howMany);
+	
 }
 char * InvertedIndexValue::getWord() {
 	return word_;
+}
+
+BinNode<Posting> * InvertedIndexValue::getPostings() {
+	return posts_;
 }

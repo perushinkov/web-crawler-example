@@ -16,11 +16,15 @@ private:
 	map<string, int> urlIds_;
 	map<int, string> idUrls_;
 
+
 	map<int, vector<int>> urlGraph_;
 public:
+
 	SiteMap(char * startingAddress);
 	char* getNextUrl(); 
 	bool hasNextUrl();
+
+	string getUrlById(int id);
 	int getDocId(char * url);
 	void updateMap(BinNode<StraightIndexValue> * links_, char* parentUrl); 
 	void printPrettyPicture();

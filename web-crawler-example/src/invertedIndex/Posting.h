@@ -1,5 +1,6 @@
 #ifndef __POSTING_H
 #define __POSTING_H 1
+#include "../sitemap/SiteMap.h"
 /*
  * Holds document id, and number of occurences in the document id.
  * Must implement 
