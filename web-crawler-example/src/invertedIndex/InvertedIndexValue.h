@@ -3,11 +3,9 @@
 #include "Posting.h"
 #include "../utils/BinNode.h"
 /*
- * TODO: Finish this
- * Must implement 
- *		int hasKey(void * ptr);
- *		int equals(void * object);
- */
+	A word and a tree of Postings.
+	Each Posting holds a document and a number of occurences.
+*/
 
 class InvertedIndexValue {
 private:

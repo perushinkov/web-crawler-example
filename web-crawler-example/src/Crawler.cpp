@@ -19,18 +19,23 @@ void main() {
 
 	while (siteMap.hasNextUrl()) {
 		char* url = siteMap.getNextUrl();
+
 		printf("\nFetching page %s. Please wait...\n", url);
+
 		char *response = httpClient::getResponse(url);
 		if (response == nullptr) {
-		printf("Page %s was not found!\n", url);
-		continue;
+			printf("Page %s was not found!\n", url);
+			continue;
 		}
+		// Fetching actual htmlPage from response
 		char *page = httpClient::trimToPage(response);
 		if (page == nullptr) {
 			continue;
 		}
 		HtmlParser parser;
+		// Parser parses page and...
 		parser.parse(page, url);
+		// ...produces the two indexes that the siteMap and the InvertedIndex need
 
 		siteMap.updateMap(parser.getLinks(), url);
 		index.updateIndex(parser.getWords(), siteMap.getDocId(url));
@@ -63,8 +68,11 @@ void main() {
 			printf("Type in a single word: ");
 			char word[30];
 			scanf("%s", word);
+			// Fetching result from invertedIndex
 			InvertedIndexValue* result = index.searchWord(word);
 			BinNode<Posting>* postings = result->getPostings();
+
+			// Will use map to sort result by number of word occurences
 			map<int, string> searchResults;
 			do {
 				if (postings->getContent() != nullptr) {
@@ -72,7 +80,9 @@ void main() {
 				}
 				postings = postings->next();
 			} while (postings != nullptr);
+
 			printf("\n");
+			
 			for (map<int, string>::reverse_iterator it = searchResults.rbegin(); it != searchResults.rend(); it++) {
 				printf("%d -> %s\n", it->first, it->second.c_str());
 			}
@@ -83,6 +93,4 @@ void main() {
 			return;
 		};
 	} while (true);
-
-
 }

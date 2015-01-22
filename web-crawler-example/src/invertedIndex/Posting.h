@@ -2,10 +2,7 @@
 #define __POSTING_H 1
 #include "../sitemap/SiteMap.h"
 /*
- * Holds document id, and number of occurences in the document id.
- * Must implement 
- *		int hasKey(void * ptr);
- *		int equals(void * object);
+	Holds document id, and number of occurences in this document.
  */
 
 class Posting {

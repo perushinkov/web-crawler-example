@@ -20,9 +20,6 @@ void HtmlParser::updateIndex(BinNode<StraightIndexValue> * targetIndex, char * w
 	}
 }
 
-/*
-	For now supports just absolute urls
-*/
 char* HtmlParser::processLink(char* link) {
 	//REMOVE VARIABLES
 	int questionMarkLocation = stringUtil::findAinB("?", link);
@@ -174,7 +171,7 @@ void HtmlParser::CharData() {
 		}
 	}
 }
-//content ::= (element | CharData | Reference | PI | Comment)*
+//content ::= (anyTag | CharData | Reference)*
 void HtmlParser::content() {
 	while(true) {
 		if (lexer_->lookahead(0) == '\0') break;

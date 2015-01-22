@@ -48,20 +48,6 @@ char * Lexer::getRemainingText() {
 	return remainder;
 }
 
-void Lexer::matchSpace() {
-	nextChar();
-}
-//HTTP-Version   = "HTTP" "/" 1*DIGIT "." 1*DIGIT
-void Lexer::matchHttpVersion() {
-		match("HTTP/");
-		matchNumber();
-		match(".");
-		matchNumber();
-}
-
-
-
-
 /**
  * Reads from the text the text that is sent as parameter.
  * If it is not the same function returns false.
@@ -104,23 +90,6 @@ bool Lexer::isNext(char * txt) {
 	return false;
 }
 
-/**
- * Reads from the text a number.
- * If the text does not start with a digit returns false.
- */
-long Lexer::matchNumber() {
-	long num = 0;
-	char current = text_[pos_];
-	while(current >= '0' && current <= '9') {
-		num *= 10;
-		num += current - '0';
-		current = nextChar();
-	}
-	if (current == 0) {
-		throw new MatchException;
-	}
-	return num;
-}
 /**
 * Matches word containing English letters.
 * Words are reduced to lowerCase.

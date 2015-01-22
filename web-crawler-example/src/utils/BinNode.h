@@ -2,8 +2,14 @@
 #define __BINNODE_H 1
 
 /*
- * TODO: Finish this
- */
+	The binary tree which this project uses.
+	It supports basic search, add, delete and iteration functionality.
+	Some of its methods have requirements of T.
+	For instance T must implement
+		bool hasKey(void* key)
+	to use findByKey(void* key);
+	and print() to use the BinNode print() method;
+*/
 template <class T>
 class BinNode {
 private:

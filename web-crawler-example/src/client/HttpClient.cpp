@@ -97,9 +97,6 @@ char * httpClient::getResponse(char * url) {
 	 }
  }
  char* httpClient::trimToPage(char* response) {
-	 int k = strlen(response);
-	 int pos = stringUtil::findAinB("HTTP/1.1 ", response);
-
 	 response += stringUtil::findAinB("<html", response); // Moving pointer to start of html body
 	 return response;
  }
